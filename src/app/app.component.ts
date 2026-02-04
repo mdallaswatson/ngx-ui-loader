@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { RouterOutlet } from '@angular/router';
 import { MatToolbar } from '@angular/material/toolbar';
@@ -20,6 +20,7 @@ import { NgxUiLoaderModule } from "projects/ngx-ui-loader/src/lib/core/ngx-ui-lo
     MatIcon,
     MatButton,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
   demoService = inject(DemoService);
