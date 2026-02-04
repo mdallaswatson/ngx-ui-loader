@@ -84,7 +84,7 @@ export class NgxUiLoaderComponent implements OnChanges, OnDestroy, OnInit {
   backgroundClosingWatcher: Subscription;
 
   defaultConfig: NgxUiLoaderConfig;
-  initialized: boolean;
+  initialized: boolean = false;
 
   /**
    * Constructor
@@ -94,7 +94,6 @@ export class NgxUiLoaderComponent implements OnChanges, OnDestroy, OnInit {
     private changeDetectorRef: ChangeDetectorRef,
     private ngxService: NgxUiLoaderService,
   ) {
-    this.initialized = false;
     this.defaultConfig = this.ngxService.getDefaultConfig();
 
     this.bgsColor = this.defaultConfig.bgsColor;
