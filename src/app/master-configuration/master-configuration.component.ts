@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { JsonPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -29,7 +29,6 @@ const LOGO_URL = 'assets/angular.png';
   templateUrl: './master-configuration.component.html',
   styleUrls: ['./master-configuration.component.scss'],
   imports: [
-    CommonModule,
     FormsModule,
     RouterLink,
     MatButtonModule,
@@ -43,7 +42,8 @@ const LOGO_URL = 'assets/angular.png';
     MatSliderModule,
     ColorPickerDirective,
     ControllerComponent,
-  ],
+    JsonPipe
+],
 })
 export class MasterConfigurationComponent implements OnInit {
   private ngxUiLoaderService = inject(NgxUiLoaderService);

@@ -1,9 +1,8 @@
 <!-- Progress bar {{{ -->
 @if (hasProgressBar) {
   <div
-    class="ngx-progress-bar"
+    [class]="'ngx-progress-bar ngx-progress-bar-' + pbDirection"
     [class.ngx-position-absolute]="loaderId !== defaultConfig.masterLoaderId"
-    [ngClass]="'ngx-progress-bar-' + pbDirection"
     [style.height.px]="pbThickness"
     [style.color]="pbColor"
     [class.loading-foreground]="showForeground"
@@ -26,8 +25,7 @@
   <!-- Logo {{{ -->
   @if (logoUrl) {
     <img
-      class="ngx-loading-logo"
-      [ngClass]="logoPosition"
+      [class]="'ngx-loading-logo ' + logoPosition"
       [src]="trustedLogoUrl"
       [style.width.px]="logoSize"
       [style.height.px]="logoSize"
@@ -38,8 +36,7 @@
 
   <!-- Foreground spinner {{{ -->
   <div
-    class="ngx-foreground-spinner"
-    [ngClass]="fgsPosition"
+    [class]="'ngx-foreground-spinner ' + fgsPosition"
     [style.color]="fgsColor"
     [style.width.px]="fgsSize"
     [style.height.px]="fgsSize"
@@ -59,8 +56,7 @@
 
   <!-- Loading text {{{ -->
   <div
-    class="ngx-loading-text"
-    [ngClass]="textPosition"
+    class="ngx-loading-text " + logoPosition
     [style.top]="textTop"
     [style.color]="textColor"
     >
@@ -72,12 +68,12 @@
 
 <!-- Background spinner {{{ -->
 <div
-  class="ngx-background-spinner"
+  [class]="'ngx-background-spinner ' + bgsPosition"
   [class.ngx-position-absolute]="loaderId !== defaultConfig.masterLoaderId"
-  [ngClass]="bgsPosition"
   [class.loading-background]="showBackground"
   [class.background-closing]="backgroundClosing"
   [class.fast-closing]="backgroundClosing && fastFadeOut"
+
   [style.width.px]="bgsSize"
   [style.height.px]="bgsSize"
   [style.color]="bgsColor"
