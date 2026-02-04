@@ -5,9 +5,9 @@
     [class.ngx-position-absolute]="loaderId() !== defaultConfig.masterLoaderId"
     [style.height.px]="pbThickness()"
     [style.color]="pbColor()"
-    [class.loading-foreground]="showForeground"
-    [class.foreground-closing]="foregroundClosing"
-    [class.fast-closing]="foregroundClosing && fastFadeOut"
+    [class.loading-foreground]="showForeground()"
+    [class.foreground-closing]="foregroundClosing()"
+    [class.fast-closing]="foregroundClosing() && fastFadeOut()"
   ></div>
 }
 <!-- Progress bar }}} -->
@@ -18,18 +18,18 @@
   [class.ngx-position-absolute]="loaderId() !== defaultConfig.masterLoaderId"
   [style.background-color]="overlayColor()"
   [style.border-radius]="overlayBorderRadius()"
-  [class.loading-foreground]="showForeground"
-  [class.foreground-closing]="foregroundClosing"
-  [class.fast-closing]="foregroundClosing && fastFadeOut"
+  [class.loading-foreground]="showForeground()"
+  [class.foreground-closing]="foregroundClosing()"
+  [class.fast-closing]="foregroundClosing() && fastFadeOut()"
   >
   <!-- Logo {{{ -->
   @if (logoUrl()) {
     <img
       [class]="'ngx-loading-logo ' + logoPosition()"
-      [src]="trustedLogoUrl"
+      [src]="trustedLogoUrl()"
       [style.width.px]="logoSize()"
       [style.height.px]="logoSize()"
-      [style.top]="logoTop"
+      [style.top]="logoTop()"
       />
   }
   <!-- Logo }}} -->
@@ -40,11 +40,11 @@
     [style.color]="fgsColor()"
     [style.width.px]="fgsSize()"
     [style.height.px]="fgsSize()"
-    [style.top]="spinnerTop"
+    [style.top]="spinnerTop()"
     >
     @if (!fgsTemplate()) {
-      <div [class]="fgSpinnerClass">
-        @for (div of fgDivs; track div) {
+      <div [class]="fgSpinnerClass()">
+        @for (div of fgDivs(); track div) {
           <div></div>
         }
       </div>
@@ -57,7 +57,7 @@
   <!-- Loading text {{{ -->
   <div
     class="ngx-loading-text " + logoPosition
-    [style.top]="textTop"
+    [style.top]="textTop()"
     [style.color]="textColor()"
     >
     <span>{{ text() }}</span>
@@ -70,9 +70,9 @@
 <div
   [class]="'ngx-background-spinner ' + bgsPosition()"
   [class.ngx-position-absolute]="loaderId() !== defaultConfig.masterLoaderId"
-  [class.loading-background]="showBackground"
-  [class.background-closing]="backgroundClosing"
-  [class.fast-closing]="backgroundClosing && fastFadeOut"
+  [class.loading-background]="showBackground()"
+  [class.background-closing]="backgroundClosing()"
+  [class.fast-closing]="backgroundClosing() && fastFadeOut()"
 
   [style.width.px]="bgsSize()"
   [style.height.px]="bgsSize()"
@@ -80,8 +80,8 @@
   [style.opacity]="bgsOpacity()"
   >
   @if (!bgsTemplate()) {
-    <div [class]="bgSpinnerClass">
-      @for (div of bgDivs; track div) {
+    <div [class]="bgSpinnerClass()">
+      @for (div of bgDivs(); track div) {
         <div></div>
       }
     </div>

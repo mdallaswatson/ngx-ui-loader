@@ -1,6 +1,6 @@
 /* eslint-disable @angular-eslint/component-selector */
 /* eslint-disable @angular-eslint/prefer-standalone */
-import { Component, OnInit, OnChanges, SimpleChanges, SimpleChange, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, TemplateRef, inject, input } from '@angular/core';
+import { Component, OnInit, OnChanges, SimpleChanges, SimpleChange, OnDestroy, ChangeDetectionStrategy, TemplateRef, inject, input, signal } from '@angular/core';
 import {
   DomSanitizer,
   SafeResourceUrl,
@@ -25,7 +25,6 @@ import { ShowEvent } from '../utils/interfaces';
 })
 export class NgxUiLoaderComponent implements OnChanges, OnDestroy, OnInit {
   private domSanitizer = inject(DomSanitizer);
-  private changeDetectorRef = inject(ChangeDetectorRef);
   private ngxService = inject(NgxUiLoaderService);
 
   defaultConfig: NgxUiLoaderConfig = this.ngxService.getDefaultConfig();
@@ -59,20 +58,20 @@ export class NgxUiLoaderComponent implements OnChanges, OnDestroy, OnInit {
   readonly textColor = input<string>(this.defaultConfig.textColor);
   readonly textPosition = input<PositionType>(this.defaultConfig.textPosition);
 
-  fastFadeOut: boolean = this.defaultConfig.fastFadeOut;
-  fgDivs: number[];
-  fgSpinnerClass: string;
-  bgDivs: number[];
-  bgSpinnerClass: string;
-  showForeground: boolean;
-  showBackground: boolean;
-  foregroundClosing: boolean;
-  backgroundClosing: boolean;
+  fastFadeOut = signal<boolean>(this.defaultConfig.fastFadeOut);
+  fgDivs = signal<number[]>([]);
+  fgSpinnerClass = signal<string>('');
+  bgDivs = signal<number[]>([]);
+  bgSpinnerClass = signal<string>('');
+  showForeground = signal<boolean>(false);
+  showBackground = signal<boolean>(false);
+  foregroundClosing = signal<boolean>(false);
+  backgroundClosing = signal<boolean>(false);
 
-  trustedLogoUrl: SafeResourceUrl;
-  logoTop: SafeStyle;
-  spinnerTop: SafeStyle;
-  textTop: SafeStyle;
+  trustedLogoUrl = signal<SafeResourceUrl>('');
+  logoTop = signal<SafeStyle>('initial');
+  spinnerTop = signal<SafeStyle>('initial');
+  textTop = signal<SafeStyle>('initial');
 
   showForegroundWatcher: Subscription;
   showBackgroundWatcher: Subscription;
@@ -90,17 +89,16 @@ export class NgxUiLoaderComponent implements OnChanges, OnDestroy, OnInit {
     this.ngxService.bindLoaderData(this.loaderId());
     this.determinePositions();
 
-    this.trustedLogoUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(
+    this.trustedLogoUrl.set(this.domSanitizer.bypassSecurityTrustResourceUrl(
       this.logoUrl(),
-    );
+    ));
 
     this.showForegroundWatcher = this.ngxService.showForeground$
       .pipe(
         filter((showEvent: ShowEvent) => this.loaderId() === showEvent.loaderId),
       )
       .subscribe((data) => {
-        this.showForeground = data.isShow;
-        this.changeDetectorRef.markForCheck();
+        this.showForeground.set(data.isShow);
       });
 
     this.showBackgroundWatcher = this.ngxService.showBackground$
@@ -108,8 +106,7 @@ export class NgxUiLoaderComponent implements OnChanges, OnDestroy, OnInit {
         filter((showEvent: ShowEvent) => this.loaderId() === showEvent.loaderId),
       )
       .subscribe((data) => {
-        this.showBackground = data.isShow;
-        this.changeDetectorRef.markForCheck();
+        this.showBackground.set(data.isShow);
       });
 
     this.foregroundClosingWatcher = this.ngxService.foregroundClosing$
@@ -117,8 +114,7 @@ export class NgxUiLoaderComponent implements OnChanges, OnDestroy, OnInit {
         filter((showEvent: ShowEvent) => this.loaderId() === showEvent.loaderId),
       )
       .subscribe((data) => {
-        this.foregroundClosing = data.isShow;
-        this.changeDetectorRef.markForCheck();
+        this.foregroundClosing.set(data.isShow);
       });
 
     this.backgroundClosingWatcher = this.ngxService.backgroundClosing$
@@ -126,8 +122,7 @@ export class NgxUiLoaderComponent implements OnChanges, OnDestroy, OnInit {
         filter((showEvent: ShowEvent) => this.loaderId() === showEvent.loaderId),
       )
       .subscribe((data) => {
-        this.backgroundClosing = data.isShow;
-        this.changeDetectorRef.markForCheck();
+        this.backgroundClosing.set(data.isShow);
       });
     this.initialized = true;
   }
@@ -151,9 +146,9 @@ export class NgxUiLoaderComponent implements OnChanges, OnDestroy, OnInit {
     this.determinePositions();
 
     if (logoUrlChange) {
-      this.trustedLogoUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(
+      this.trustedLogoUrl.set(this.domSanitizer.bypassSecurityTrustResourceUrl(
         this.logoUrl(),
-      );
+      ));
     }
   }
 
@@ -180,77 +175,77 @@ export class NgxUiLoaderComponent implements OnChanges, OnDestroy, OnInit {
    * Initialize spinners
    */
   private initializeSpinners(): void {
-    this.fgDivs = Array(SPINNER_CONFIG[this.fgsType()].divs).fill(1);
-    this.fgSpinnerClass = SPINNER_CONFIG[this.fgsType()].class;
-    this.bgDivs = Array(SPINNER_CONFIG[this.bgsType()].divs).fill(1);
-    this.bgSpinnerClass = SPINNER_CONFIG[this.bgsType()].class;
+    this.fgDivs.set(Array(SPINNER_CONFIG[this.fgsType()].divs).fill(1));
+    this.fgSpinnerClass.set(SPINNER_CONFIG[this.fgsType()].class);
+    this.bgDivs.set(Array(SPINNER_CONFIG[this.bgsType()].divs).fill(1));
+    this.bgSpinnerClass.set(SPINNER_CONFIG[this.bgsType()].class);
   }
 
   /**
    * Determine the positions of spinner, logo and text
    */
   private determinePositions(): void {
-    this.logoTop = 'initial';
-    this.spinnerTop = 'initial';
-    this.textTop = 'initial';
+    this.logoTop.set('initial');
+    this.spinnerTop.set('initial');
+    this.textTop.set('initial');
     const textSize = 24;
 
     const logoPosition = this.logoPosition();
     if (logoPosition.startsWith('center')) {
-      this.logoTop = '50%';
+      this.logoTop.set('50%');
     } else if (logoPosition.startsWith('top')) {
-      this.logoTop = '30px';
+      this.logoTop.set('30px');
     }
 
     const fgsPosition = this.fgsPosition();
     if (fgsPosition.startsWith('center')) {
-      this.spinnerTop = '50%';
+      this.spinnerTop.set('50%');
     } else if (fgsPosition.startsWith('top')) {
-      this.spinnerTop = '30px';
+      this.spinnerTop.set('30px');
     }
 
     const textPosition = this.textPosition();
     if (textPosition.startsWith('center')) {
-      this.textTop = '50%';
+      this.textTop.set('50%');
     } else if (textPosition.startsWith('top')) {
-      this.textTop = '30px';
+      this.textTop.set('30px');
     }
 
     if (fgsPosition === POSITION.centerCenter) {
       if (this.logoUrl() && logoPosition === POSITION.centerCenter) {
         if (this.text() && textPosition === POSITION.centerCenter) {
           // logo, spinner and text
-          this.logoTop = this.domSanitizer.bypassSecurityTrustStyle(
+          this.logoTop.set(this.domSanitizer.bypassSecurityTrustStyle(
             `calc(50% - ${this.fgsSize() / 2}px - ${textSize / 2}px - ${
               this.gap()
             }px)`,
-          );
-          this.spinnerTop = this.domSanitizer.bypassSecurityTrustStyle(
+          ));
+          this.spinnerTop.set(this.domSanitizer.bypassSecurityTrustStyle(
             `calc(50% + ${this.logoSize() / 2}px - ${textSize / 2}px)`,
-          );
-          this.textTop = this.domSanitizer.bypassSecurityTrustStyle(
+          ));
+          this.textTop.set(this.domSanitizer.bypassSecurityTrustStyle(
             `calc(50% + ${this.logoSize() / 2}px + ${this.gap()}px + ${
               this.fgsSize() / 2
             }px)`,
-          );
+          ));
         } else {
           // logo and spinner
-          this.logoTop = this.domSanitizer.bypassSecurityTrustStyle(
+          this.logoTop.set(this.domSanitizer.bypassSecurityTrustStyle(
             `calc(50% - ${this.fgsSize() / 2}px - ${this.gap() / 2}px)`,
-          );
-          this.spinnerTop = this.domSanitizer.bypassSecurityTrustStyle(
+          ));
+          this.spinnerTop.set(this.domSanitizer.bypassSecurityTrustStyle(
             `calc(50% + ${this.logoSize() / 2}px + ${this.gap() / 2}px)`,
-          );
+          ));
         }
       } else {
         if (this.text() && textPosition === POSITION.centerCenter) {
           // spinner and text
-          this.spinnerTop = this.domSanitizer.bypassSecurityTrustStyle(
+          this.spinnerTop.set(this.domSanitizer.bypassSecurityTrustStyle(
             `calc(50% - ${textSize / 2}px - ${this.gap() / 2}px)`,
-          );
-          this.textTop = this.domSanitizer.bypassSecurityTrustStyle(
+          ));
+          this.textTop.set(this.domSanitizer.bypassSecurityTrustStyle(
             `calc(50% + ${this.fgsSize() / 2}px + ${this.gap() / 2}px)`,
-          );
+          ));
         }
       }
     } else {
@@ -261,12 +256,12 @@ export class NgxUiLoaderComponent implements OnChanges, OnDestroy, OnInit {
         textPosition === POSITION.centerCenter
       ) {
         // logo and text
-        this.logoTop = this.domSanitizer.bypassSecurityTrustStyle(
+        this.logoTop.set(this.domSanitizer.bypassSecurityTrustStyle(
           `calc(50% - ${textSize / 2}px - ${this.gap() / 2}px)`,
-        );
-        this.textTop = this.domSanitizer.bypassSecurityTrustStyle(
+        ));
+        this.textTop.set(this.domSanitizer.bypassSecurityTrustStyle(
           `calc(50% + ${this.logoSize() / 2}px + ${this.gap() / 2}px)`,
-        );
+        ));
       }
     }
   }
