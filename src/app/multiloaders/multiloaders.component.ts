@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -18,7 +18,6 @@ const LOGO_URL = 'assets/angular.png';
   templateUrl: './multiloaders.component.html',
   styleUrls: ['./multiloaders.component.scss'],
   imports: [
-    CommonModule,
     RouterLink,
     MatButtonModule,
     NgxUiLoaderModule,

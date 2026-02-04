@@ -1,15 +1,16 @@
 <!-- Progress bar {{{ -->
-<div
-  *ngIf="hasProgressBar"
-  class="ngx-progress-bar"
-  [class.ngx-position-absolute]="loaderId !== defaultConfig.masterLoaderId"
-  [ngClass]="'ngx-progress-bar-' + pbDirection"
-  [style.height.px]="pbThickness"
-  [style.color]="pbColor"
-  [class.loading-foreground]="showForeground"
-  [class.foreground-closing]="foregroundClosing"
-  [class.fast-closing]="foregroundClosing && fastFadeOut"
-></div>
+@if (hasProgressBar) {
+  <div
+    class="ngx-progress-bar"
+    [class.ngx-position-absolute]="loaderId !== defaultConfig.masterLoaderId"
+    [ngClass]="'ngx-progress-bar-' + pbDirection"
+    [style.height.px]="pbThickness"
+    [style.color]="pbColor"
+    [class.loading-foreground]="showForeground"
+    [class.foreground-closing]="foregroundClosing"
+    [class.fast-closing]="foregroundClosing && fastFadeOut"
+  ></div>
+}
 <!-- Progress bar }}} -->
 
 <!-- Foreground container {{{ -->
@@ -21,17 +22,18 @@
   [class.loading-foreground]="showForeground"
   [class.foreground-closing]="foregroundClosing"
   [class.fast-closing]="foregroundClosing && fastFadeOut"
->
+  >
   <!-- Logo {{{ -->
-  <img
-    *ngIf="logoUrl"
-    class="ngx-loading-logo"
-    [ngClass]="logoPosition"
-    [src]="trustedLogoUrl"
-    [style.width.px]="logoSize"
-    [style.height.px]="logoSize"
-    [style.top]="logoTop"
-  />
+  @if (logoUrl) {
+    <img
+      class="ngx-loading-logo"
+      [ngClass]="logoPosition"
+      [src]="trustedLogoUrl"
+      [style.width.px]="logoSize"
+      [style.height.px]="logoSize"
+      [style.top]="logoTop"
+      />
+  }
   <!-- Logo }}} -->
 
   <!-- Foreground spinner {{{ -->
@@ -42,13 +44,16 @@
     [style.width.px]="fgsSize"
     [style.height.px]="fgsSize"
     [style.top]="spinnerTop"
-  >
-    <div *ngIf="!fgsTemplate; else foregroundTemplate" [class]="fgSpinnerClass">
-      <div *ngFor="let div of fgDivs"></div>
-    </div>
-    <ng-template #foregroundTemplate>
+    >
+    @if (!fgsTemplate) {
+      <div [class]="fgSpinnerClass">
+        @for (div of fgDivs; track div) {
+          <div></div>
+        }
+      </div>
+    } @else {
       <ng-container *ngTemplateOutlet="fgsTemplate"></ng-container>
-    </ng-template>
+    }
   </div>
   <!-- Foreground spinner }}} -->
 
@@ -58,7 +63,7 @@
     [ngClass]="textPosition"
     [style.top]="textTop"
     [style.color]="textColor"
-  >
+    >
     <span>{{ text }}</span>
   </div>
   <!-- Loading text }}} -->
@@ -77,12 +82,15 @@
   [style.height.px]="bgsSize"
   [style.color]="bgsColor"
   [style.opacity]="bgsOpacity"
->
-  <div *ngIf="!bgsTemplate; else backgroundTemplate" [class]="bgSpinnerClass">
-    <div *ngFor="let div of bgDivs"></div>
-  </div>
-  <ng-template #backgroundTemplate>
+  >
+  @if (!bgsTemplate) {
+    <div [class]="bgSpinnerClass">
+      @for (div of bgDivs; track div) {
+        <div></div>
+      }
+    </div>
+  } @else {
     <ng-container *ngTemplateOutlet="bgsTemplate"></ng-container>
-  </ng-template>
+  }
 </div>
 <!-- Background spinner }}} -->

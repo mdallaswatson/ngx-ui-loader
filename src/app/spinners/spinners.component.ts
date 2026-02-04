@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { SPINNER_CONFIG } from '../../../projects/ngx-ui-loader/src/lib/utils/constants';
@@ -11,7 +11,7 @@ import { SPINNER_CONFIG } from '../../../projects/ngx-ui-loader/src/lib/utils/co
     '../../../projects/ngx-ui-loader/src/lib/core/ngx-ui-loader.component.scss',
     './spinners.component.scss',
   ],
-  imports: [CommonModule, RouterLink, MatButtonModule],
+  imports: [RouterLink, MatButtonModule],
 })
 export class SpinnersComponent implements OnInit {
   spinners: Array<{

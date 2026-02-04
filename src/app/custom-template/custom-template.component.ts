@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -11,7 +11,6 @@ import { ControllerComponent } from '../controller/controller.component';
   templateUrl: './custom-template.component.html',
   styleUrls: ['./custom-template.component.scss'],
   imports: [
-    CommonModule,
     RouterLink,
     MatButtonModule,
     NgxUiLoaderModule,
