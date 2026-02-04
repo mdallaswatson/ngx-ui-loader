@@ -1,10 +1,4 @@
-import {
-  NgModule,
-  ModuleWithProviders,
-  Inject,
-  Optional,
-  SkipSelf,
-} from '@angular/core';
+import { NgModule, ModuleWithProviders, inject } from '@angular/core';
 import {
   NavigationCancel,
   NavigationEnd,
@@ -28,14 +22,12 @@ export class NgxUiLoaderRouterModule {
   /**
    * Constructor
    */
-  constructor(
-    @Optional() @SkipSelf() parentModule: NgxUiLoaderRouterModule,
-    @Optional()
-    @Inject(NGX_UI_LOADER_ROUTER_CONFIG_TOKEN)
-    customConfig: NgxUiLoaderRouterConfig,
-    router: Router,
-    loader: NgxUiLoaderService
-  ) {
+  constructor() {
+    const parentModule = inject(NgxUiLoaderRouterModule, { optional: true, skipSelf: true })!;
+    const customConfig = inject<NgxUiLoaderRouterConfig>(NGX_UI_LOADER_ROUTER_CONFIG_TOKEN, { optional: true })!;
+    const router = inject(Router);
+    const loader = inject(NgxUiLoaderService);
+
     if (parentModule) {
       throw new Error(
         '[ngx-ui-loader] - NgxUiLoaderRouterModule is already loaded. It should be imported in the root `AppModule` only!'

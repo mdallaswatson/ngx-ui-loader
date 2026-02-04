@@ -6,11 +6,11 @@
       class="fxFlex-100 fxFlex-gt-md-36 fxLayout-column fxLayout-sm-row fxLayout-md-row p-12"
     >
       <div class="fxFlex-sm-50 fxFlex-md-50 mat-elevation-z4">
-        <app-controller [loader]="loader"></app-controller>
+        <app-controller [loader]="loader()" />
       </div>
       <div class="fxLayout-column fxFlex-sm-50 fxFlex-md-50 config-info">
         <span class="place-holder">ngx-ui-loader-configuration = </span>
-        <pre><code>{{demoService.config | json}}</code></pre>
+        <pre><code>{{demoService.config() | json}}</code></pre>
       </div>
     </div>
     <!-- Foreground {{{-->
@@ -21,45 +21,51 @@
         <mat-label>Foreground Spinner Color (fgsColor)</mat-label>
         <input
           matInput
-          [(ngModel)]="demoService.config.fgsColor"
+          [ngModel]="demoService.config().fgsColor"
           readonly
         />
         <button
           mat-icon-button
           matSuffix
-          [(colorPicker)]="demoService.config.fgsColor"
+          [colorPicker]="demoService.config().fgsColor"
+          (colorPickerChange)="demoService.updateConfig({fgsColor: $event})"
           [cpPosition]="'bottom'"
           [cpUseRootViewContainer]="true"
           (click)="$event.stopPropagation()"
           type="button"
         >
-          <mat-icon
-            [style.color]="demoService.config.fgsColor"
-            fontIcon="mdi-palette"
-            fontSet="mdi"
-          ></mat-icon>
+          <mat-icon [style.color]="demoService.config().fgsColor"
+                    fontIcon="mdi-palette"
+                    fontSet="mdi"
+          />
         </button>
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Foreground Spinner Type (fgsType)</mat-label>
         <mat-select
-          [(value)]="demoService.config.fgsType"
+          [value]="demoService.config().fgsType"
+          (valueChange)="demoService.updateConfig({fgsType: $event})"
         >
-          <mat-option *ngFor="let type of spinnerTypes" [value]="type">
-            {{ type }}
-          </mat-option>
+          @for (type of spinnerTypes(); track type) {
+            <mat-option [value]="type">
+              {{ type }}
+            </mat-option>
+          }
         </mat-select>
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Foreground Spinner Position (fgsPosition)</mat-label>
         <mat-select
-          [(value)]="demoService.config.fgsPosition"
+          [value]="demoService.config().fgsPosition"
+          (valueChange)="demoService.updateConfig({fgsPosition: $event})"
         >
-          <mat-option *ngFor="let position of positions" [value]="position">
-            {{ position }}
-          </mat-option>
+          @for (position of positions(); track position) {
+            <mat-option [value]="position">
+              {{ position }}
+            </mat-option>
+          }
         </mat-select>
       </mat-form-field>
 
@@ -69,23 +75,23 @@
           max="150"
           min="20"
           step="10"
-          discrete
+          [discrete]="true"
         >
-          <input matSliderThumb [(ngModel)]="demoService.config.fgsSize">
+          <input matSliderThumb [ngModel]="demoService.config().fgsSize" (ngModelChange)="demoService.updateConfig({fgsSize: $event})">
         </mat-slider>
       </div>
 
       <div>
-        <span class="place-holder"
+          <span class="place-holder"
           >Blur the page while foreground loading (blur)</span
-        >
+          >
         <mat-slider
           max="15"
           min="0"
           step="1"
-          discrete
+          [discrete]="true"
         >
-          <input matSliderThumb [(ngModel)]="demoService.config.blur">
+          <input matSliderThumb [ngModel]="demoService.config().blur" (ngModelChange)="demoService.updateConfig({blur: $event})">
         </mat-slider>
       </div>
 
@@ -93,90 +99,99 @@
         <mat-label>Overlay Color (overlayColor)</mat-label>
         <input
           matInput
-          [(ngModel)]="demoService.config.overlayColor"
+          [ngModel]="demoService.config().overlayColor"
           readonly
         />
         <button
           mat-icon-button
           matSuffix
-          [(colorPicker)]="demoService.config.overlayColor"
+          [colorPicker]="demoService.config().overlayColor"
+          (colorPickerChange)="demoService.updateConfig({overlayColor: $event})"
           cpOutputFormat="rgba"
           [cpPosition]="'bottom'"
           [cpUseRootViewContainer]="true"
           (click)="$event.stopPropagation()"
           type="button"
         >
-          <mat-icon
-            [style.color]="demoService.config.overlayColor"
-            fontIcon="mdi-palette"
-            fontSet="mdi"
-          ></mat-icon>
+          <mat-icon [style.color]="demoService.config().overlayColor"
+                    fontIcon="mdi-palette"
+                    fontSet="mdi"
+          />
         </button>
       </mat-form-field>
 
       <div style="margin-top: 21px; margin-bottom: 20px">
         <mat-checkbox
           (change)="toggleProgressBar($event.checked)"
-          [checked]="demoService.config.hasProgressBar"
-          >Has progress bar</mat-checkbox
+          [checked]="demoService.config().hasProgressBar"
+        >Has progress bar</mat-checkbox
         >
       </div>
 
-      <mat-form-field *ngIf="demoService.config.hasProgressBar">
-        <mat-label>Progress Bar Color (pbColor)</mat-label>
-        <input
-          matInput
-          [(ngModel)]="demoService.config.pbColor"
-          readonly
-        />
-        <button
-          mat-icon-button
-          matSuffix
-          [(colorPicker)]="demoService.config.pbColor"
-          [cpPosition]="'bottom'"
-          [cpUseRootViewContainer]="true"
-          (click)="$event.stopPropagation()"
-          type="button"
-        >
-          <mat-icon
-            [style.color]="demoService.config.pbColor"
-            fontIcon="mdi-palette"
-            fontSet="mdi"
-          ></mat-icon>
-        </button>
-      </mat-form-field>
+      @if (demoService.config().hasProgressBar) {
+        <mat-form-field>
+          <mat-label>Progress Bar Color (pbColor)</mat-label>
+          <input
+            matInput
+            [ngModel]="demoService.config().pbColor"
+            readonly
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            [colorPicker]="demoService.config().pbColor"
+            (colorPickerChange)="demoService.updateConfig({pbColor: $event})"
+            [cpPosition]="'bottom'"
+            [cpUseRootViewContainer]="true"
+            (click)="$event.stopPropagation()"
+            type="button"
+          >
+            <mat-icon [style.color]="demoService.config().pbColor"
+                      fontIcon="mdi-palette"
+                      fontSet="mdi"
+            />
+          </button>
+        </mat-form-field>
+      }
 
       <div style="margin-top: 21px; margin-bottom: 20px">
         <mat-checkbox
           (change)="addLogo($event.checked)"
-          [checked]="demoService.config.logoUrl !== ''"
-          >Add logo</mat-checkbox
+          [checked]="demoService.config().logoUrl !== ''"
+        >Add logo</mat-checkbox
         >
       </div>
 
-      <mat-form-field *ngIf="demoService.config.logoUrl">
-        <mat-label>Logo Position (logoPosition)</mat-label>
-        <mat-select
-          [(value)]="demoService.config.logoPosition"
-        >
-          <mat-option *ngFor="let position of positions" [value]="position">
-            {{ position }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+      @if (demoService.config().logoUrl) {
+        <mat-form-field>
+          <mat-label>Logo Position (logoPosition)</mat-label>
+          <mat-select
+            [value]="demoService.config().logoPosition"
+            (valueChange)="demoService.updateConfig({logoPosition: $event})"
+          >
+            @for (position of positions(); track position) {
+              <mat-option [value]="position">
+                {{ position }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      }
 
-      <div *ngIf="demoService.config.logoUrl">
-        <span class="place-holder">Logo size (logoSize)</span>
-        <mat-slider
-          max="200"
-          min="40"
-          step="10"
-          discrete
-        >
-          <input matSliderThumb [(ngModel)]="demoService.config.logoSize"
-        >
-        </mat-slider>
-      </div>
+      @if (demoService.config().logoUrl) {
+        <div>
+          <span class="place-holder">Logo size (logoSize)</span>
+          <mat-slider
+            max="200"
+            min="40"
+            step="10"
+            [discrete]="true"
+          >
+            <input matSliderThumb [ngModel]="demoService.config().logoSize" (ngModelChange)="demoService.updateConfig({logoSize: $event})"
+            >
+          </mat-slider>
+        </div>
+      }
     </div>
     <!-- Foreground }}}-->
 
@@ -188,45 +203,51 @@
         <mat-label>Background Spinner Color (bgsColor)</mat-label>
         <input
           matInput
-          [(ngModel)]="demoService.config.bgsColor"
+          [ngModel]="demoService.config().bgsColor"
           readonly
         />
         <button
           mat-icon-button
           matSuffix
-          [(colorPicker)]="demoService.config.bgsColor"
+          [colorPicker]="demoService.config().bgsColor"
+          (colorPickerChange)="demoService.updateConfig({bgsColor: $event})"
           [cpPosition]="'bottom'"
           [cpUseRootViewContainer]="true"
           (click)="$event.stopPropagation()"
           type="button"
         >
-          <mat-icon
-            [style.color]="demoService.config.bgsColor"
-            fontIcon="mdi-palette"
-            fontSet="mdi"
-          ></mat-icon>
+          <mat-icon [style.color]="demoService.config().bgsColor"
+                    fontIcon="mdi-palette"
+                    fontSet="mdi"
+          />
         </button>
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Background Spinner Type (bgsType)</mat-label>
         <mat-select
-          [(value)]="demoService.config.bgsType"
+          [value]="demoService.config().bgsType"
+          (valueChange)="demoService.updateConfig({bgsType: $event})"
         >
-          <mat-option *ngFor="let type of spinnerTypes" [value]="type">
-            {{ type }}
-          </mat-option>
+          @for (type of spinnerTypes(); track type) {
+            <mat-option [value]="type">
+              {{ type }}
+            </mat-option>
+          }
         </mat-select>
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Background Spinner Position (bgsPosition)</mat-label>
         <mat-select
-          [(value)]="demoService.config.bgsPosition"
+          [value]="demoService.config().bgsPosition"
+          (valueChange)="demoService.updateConfig({bgsPosition: $event})"
         >
-          <mat-option *ngFor="let position of positions" [value]="position">
-            {{ position }}
-          </mat-option>
+          @for (position of positions(); track position) {
+            <mat-option [value]="position">
+              {{ position }}
+            </mat-option>
+          }
         </mat-select>
       </mat-form-field>
 
@@ -236,110 +257,125 @@
           max="150"
           min="20"
           step="10"
-          discrete
+          [discrete]="true"
         >
-          <input matSliderThumb [(ngModel)]="demoService.config.bgsSize"
-        >
+          <input matSliderThumb [ngModel]="demoService.config().bgsSize" (ngModelChange)="demoService.updateConfig({bgsSize: $event})"
+          >
         </mat-slider>
       </div>
 
       <div>
-        <span class="place-holder"
-          >Background Spinner Opacity (bgsOpacity)</span
-        >
+                          <span class="place-holder"
+                          >Background Spinner Opacity (bgsOpacity)</span
+                          >
         <mat-slider
           max="1"
           min="0.1"
           step="0.1"
-          discrete
+          [discrete]="true"
         >
-          <input matSliderThumb [(ngModel)]="demoService.config.bgsOpacity"
-        >
+          <input matSliderThumb [ngModel]="demoService.config().bgsOpacity" (ngModelChange)="demoService.updateConfig({bgsOpacity: $event})"
+          >
         </mat-slider>
       </div>
 
       <div>
-        <span class="place-holder"
-          >Gap between logo, spinner and text (gap)</span
-        >
+                              <span class="place-holder"
+                              >Gap between logo, spinner and text (gap)</span
+                              >
         <mat-slider
           max="150"
           min="10"
           step="1"
-          discrete
+          [discrete]="true"
         >
-          <input matSliderThumb [(ngModel)]="demoService.config.gap"
-        >
+          <input matSliderThumb [ngModel]="demoService.config().gap" (ngModelChange)="demoService.updateConfig({gap: $event})"
+          >
         </mat-slider>
       </div>
 
-      <div *ngIf="demoService.config.hasProgressBar">
-        <span class="place-holder">Progress Bar Thickness (pbThickness)</span>
-        <mat-slider
-          max="10"
-          min="1"
-          step="1"
-          discrete
-        >
-          <input matSliderThumb [(ngModel)]="demoService.config.pbThickness"
-        >
-        </mat-slider>
-      </div>
+      @if (demoService.config().hasProgressBar) {
+        <div>
+          <span class="place-holder">Progress Bar Thickness (pbThickness)</span>
+          <mat-slider
+            max="10"
+            min="1"
+            step="1"
+            [discrete]="true"
+          >
+            <input matSliderThumb [ngModel]="demoService.config().pbThickness" (ngModelChange)="demoService.updateConfig({pbThickness: $event})"
+            >
+          </mat-slider>
+        </div>
+      }
 
-      <mat-form-field *ngIf="demoService.config.hasProgressBar">
-        <mat-label>Progress Bar Direction (pbDirection)</mat-label>
-        <mat-select
-          [(value)]="demoService.config.pbDirection"
-        >
-          <mat-option *ngFor="let direction of directions" [value]="direction">
-            {{ direction }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+      @if (demoService.config().hasProgressBar) {
+        <mat-form-field>
+          <mat-label>Progress Bar Direction (pbDirection)</mat-label>
+          <mat-select
+            [value]="demoService.config().pbDirection"
+            (valueChange)="demoService.updateConfig({pbDirection: $event})"
+          >
+            @for (direction of directions(); track direction) {
+              <mat-option [value]="direction">
+                {{ direction }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      }
 
       <mat-form-field>
         <mat-label>Loading Text (text)</mat-label>
         <input
           matInput
-          [(ngModel)]="demoService.config.text"
+          [ngModel]="demoService.config().text"
+          (ngModelChange)="demoService.updateConfig({text: $event})"
           autocomplete="off"
         />
       </mat-form-field>
 
-      <mat-form-field *ngIf="demoService.config.text">
-        <mat-label>Loading Text Position (textPosition)</mat-label>
-        <mat-select
-          [(value)]="demoService.config.textPosition"
-        >
-          <mat-option *ngFor="let position of positions" [value]="position">
-            {{ position }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+      @if (demoService.config().text) {
+        <mat-form-field>
+          <mat-label>Loading Text Position (textPosition)</mat-label>
+          <mat-select
+            [value]="demoService.config().textPosition"
+            (valueChange)="demoService.updateConfig({textPosition: $event})"
+          >
+            @for (position of positions(); track position) {
+              <mat-option [value]="position">
+                {{ position }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      }
 
-      <mat-form-field *ngIf="demoService.config.text">
-        <mat-label>Loading Text Color (textColor)</mat-label>
-        <input
-          matInput
-          [(ngModel)]="demoService.config.textColor"
-          readonly
-        />
-        <div
-          matSuffix
-          [(colorPicker)]="demoService.config.textColor"
-          [cpPosition]="'bottom'"
-          [cpUseRootViewContainer]="true"
-          (click)="$event.stopPropagation()"
-        >
-          <button mat-icon-button type="button">
-            <mat-icon
-              [style.color]="demoService.config.textColor"
-              fontIcon="mdi-palette"
-              fontSet="mdi"
-            ></mat-icon>
-          </button>
-        </div>
-      </mat-form-field>
+      @if (demoService.config().text) {
+        <mat-form-field>
+          <mat-label>Loading Text Color (textColor)</mat-label>
+          <input
+            matInput
+            [ngModel]="demoService.config().textColor"
+            readonly
+          />
+          <div
+            matSuffix
+            [colorPicker]="demoService.config().textColor"
+            (colorPickerChange)="demoService.updateConfig({textColor: $event})"
+            [cpPosition]="'bottom'"
+            [cpUseRootViewContainer]="true"
+            (click)="$event.stopPropagation()"
+          >
+            <button mat-icon-button type="button">
+              <mat-icon [style.color]="demoService.config().textColor"
+                        fontIcon="mdi-palette"
+                        fontSet="mdi"
+              />
+            </button>
+          </div>
+        </mat-form-field>
+      }
     </div>
     <!-- Background }}}-->
     <div class="fxFlex-100 fxLayout-row-wrap fxLayoutAlign-center" style="gap: 8px;">
@@ -347,26 +383,26 @@
         Reset Configuration
       </button>
       <a mat-raised-button color="primary" [routerLink]="'/multiloaders'"
-        >Multiple Loaders</a
+      >Multiple Loaders</a
       >
       <button
         mat-raised-button
         color="accent"
         (click)="getDownloadStats()"
-        [disabled]="disabled"
+        [disabled]="disabled()"
       >
         Http request with loader
       </button>
       <a mat-raised-button color="primary" [routerLink]="'/spinners'"
-        >Available Spinners</a
+      >Available Spinners</a
       >
       <button
         mat-raised-button
         color="accent"
         (click)="openGithub()"
-        >Star on Github</button>
+      >Star on Github</button>
       <a mat-raised-button color="primary" [routerLink]="'/custom-template'"
-        >Custom Template</a
+      >Custom Template</a
       >
     </div>
   </div>

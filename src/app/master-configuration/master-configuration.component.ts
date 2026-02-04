@@ -1,29 +1,24 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
+import { JsonPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
-import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatListModule } from '@angular/material/list';
-import { MatSelectModule } from '@angular/material/select';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatSliderModule } from '@angular/material/slider';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
+import { MatInput } from '@angular/material/input';
+import { MatOption, MatSelect } from '@angular/material/select';
+import { MatSlider, MatSliderThumb } from '@angular/material/slider';
 import { ColorPickerDirective } from 'ngx-color-picker';
 
-import {
-  NgxUiLoaderService,
-  Loader,
-  SPINNER,
-  POSITION,
-  PB_DIRECTION,
-} from 'ngx-ui-loader';
+
 import { DemoService } from '../demo.service';
 import { ControllerComponent } from '../controller/controller.component';
+import { Loader } from "projects/ngx-ui-loader/src/lib/utils/interfaces";
+import { NgxUiLoaderService } from "projects/ngx-ui-loader/src/lib/core/ngx-ui-loader.service";
+import { PB_DIRECTION, POSITION, SPINNER } from "projects/ngx-ui-loader/src/public-api";
 
 const LOGO_URL = 'assets/angular.png';
 
@@ -32,51 +27,54 @@ const LOGO_URL = 'assets/angular.png';
   templateUrl: './master-configuration.component.html',
   styleUrls: ['./master-configuration.component.scss'],
   imports: [
-    CommonModule,
     FormsModule,
     RouterLink,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatListModule,
-    MatSelectModule,
-    MatSlideToggleModule,
-    MatSliderModule,
     ColorPickerDirective,
     ControllerComponent,
+    JsonPipe,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatIconButton,
+    MatIcon,
+    MatSelect,
+    MatOption,
+    MatSlider,
+    MatSliderThumb,
+    MatCheckbox,
+    MatButton
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MasterConfigurationComponent implements OnInit {
-  spinnerTypes: string[];
-  positions: string[];
-  directions: string[];
+  private ngxUiLoaderService = inject(NgxUiLoaderService);
+  demoService = inject(DemoService);
+  private http = inject(HttpClient);
 
-  disabled: boolean;
+  spinnerTypes = signal<string[]>([]);
+  positions = signal<string[]>([]);
+  directions = signal<string[]>([]);
 
-  loader: Loader;
+  disabled = signal<boolean>(false);
 
-  /**
-   * Constructor
-   */
-  constructor(
-    private ngxUiLoaderService: NgxUiLoaderService,
-    public demoService: DemoService,
-    private http: HttpClient,
-  ) {}
+  loader = signal<Loader>({
+    loaderId: '',
+    tasks: {},
+    isMaster: true,
+    isBound: false,
+  });
 
   /**
    * On init
    */
   ngOnInit() {
-    this.spinnerTypes = Object.keys(SPINNER).map((key) => SPINNER[key]);
-    this.positions = Object.keys(POSITION).map((key) => POSITION[key]);
-    this.directions = Object.keys(PB_DIRECTION).map((key) => PB_DIRECTION[key]);
+    this.spinnerTypes.set(Object.keys(SPINNER).map((key) => SPINNER[key]));
+    this.positions.set(Object.keys(POSITION).map((key) => POSITION[key]));
+    this.directions.set(Object.keys(PB_DIRECTION).map((key) => PB_DIRECTION[key]));
 
-    this.disabled = false;
+    this.disabled.set(false);
 
-    this.loader = this.ngxUiLoaderService.getLoader();
+    this.loader.set(this.ngxUiLoaderService.getLoader());
   }
 
   /**
@@ -84,9 +82,9 @@ export class MasterConfigurationComponent implements OnInit {
    */
   addLogo(checked: boolean) {
     if (checked) {
-      this.demoService.config.logoUrl = LOGO_URL;
+      this.demoService.updateConfig({ logoUrl: LOGO_URL });
     } else {
-      this.demoService.config.logoUrl = '';
+      this.demoService.updateConfig({ logoUrl: '' });
     }
   }
 
@@ -94,18 +92,18 @@ export class MasterConfigurationComponent implements OnInit {
    * Toggle progress bar
    */
   toggleProgressBar(checked: boolean) {
-    this.demoService.config.hasProgressBar = checked;
+    this.demoService.updateConfig({ hasProgressBar: checked });
   }
 
   /**
    * Reset the form
    */
   reset() {
-    this.demoService.config = this.ngxUiLoaderService.getDefaultConfig();
+    this.demoService.config.set(this.ngxUiLoaderService.getDefaultConfig());
   }
 
   getDownloadStats() {
-    this.disabled = true;
+    this.disabled.set(true);
     this.http
       .get(
         `https://api.npmjs.org/downloads/range/last-month/ngx-ui-loader?t=${Date.now()}`,
@@ -113,7 +111,7 @@ export class MasterConfigurationComponent implements OnInit {
       .subscribe(
         (res: { downloads: Array<{ day: string; downloads: number }> }) => {
           console.log(res);
-          this.disabled = false;
+          this.disabled.set(false);
         },
       );
   }

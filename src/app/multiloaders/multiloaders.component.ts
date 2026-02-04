@@ -1,15 +1,11 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 
-import {
-  NgxUiLoaderService,
-  NgxUiLoaderModule,
-  Loader,
-  SPINNER,
-} from 'ngx-ui-loader';
+import { RouterLink } from '@angular/router';
+import { MatButton } from '@angular/material/button';
+
+
 import { ControllerComponent } from '../controller/controller.component';
+import { Loader, NgxUiLoaderModule, NgxUiLoaderService, SPINNER } from "projects/ngx-ui-loader/src/public-api";
 
 const LOGO_URL = 'assets/angular.png';
 
@@ -18,15 +14,19 @@ const LOGO_URL = 'assets/angular.png';
   templateUrl: './multiloaders.component.html',
   styleUrls: ['./multiloaders.component.scss'],
   imports: [
-    CommonModule,
     RouterLink,
-    MatButtonModule,
     NgxUiLoaderModule,
     ControllerComponent,
+    MatButton,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MultiloadersComponent {
-  loaders: Array<{
+  private ngxUiLoaderService = inject(NgxUiLoaderService);
+
+  masterLoader = signal<Loader>(this.ngxUiLoaderService.getLoader());
+
+  loaders = signal<Array<{
     hasProgressBar: boolean;
     loaderId: string;
     logoUrl?: string;
@@ -34,34 +34,27 @@ export class MultiloadersComponent {
     isMaster: boolean;
     spinnerType: SPINNER;
     text?: string;
-  }>;
-  masterLoader: Loader;
-  timers: ReturnType<typeof setTimeout>[];
-
-  constructor(private ngxUiLoaderService: NgxUiLoaderService) {
-    this.masterLoader = this.ngxUiLoaderService.getLoader();
-    this.loaders = [
-      {
-        hasProgressBar: true,
-        loaderId: 'loader-01',
-        logoUrl: LOGO_URL,
-        logoSize: 80,
-        isMaster: false,
-        spinnerType: SPINNER.ballScaleMultiple,
-      },
-      {
-        hasProgressBar: false,
-        loaderId: 'loader-02',
-        isMaster: false,
-        spinnerType: SPINNER.chasingDots,
-        text: 'NO progress bar',
-      },
-      {
-        hasProgressBar: true,
-        loaderId: 'loader-03',
-        isMaster: false,
-        spinnerType: SPINNER.wanderingCubes,
-      },
-    ];
-  }
+  }>>([
+    {
+      hasProgressBar: true,
+      loaderId: 'loader-01',
+      logoUrl: LOGO_URL,
+      logoSize: 80,
+      isMaster: false,
+      spinnerType: SPINNER.ballScaleMultiple,
+    },
+    {
+      hasProgressBar: false,
+      loaderId: 'loader-02',
+      isMaster: false,
+      spinnerType: SPINNER.chasingDots,
+      text: 'NO progress bar',
+    },
+    {
+      hasProgressBar: true,
+      loaderId: 'loader-03',
+      isMaster: false,
+      spinnerType: SPINNER.wanderingCubes,
+    },
+  ]);
 }

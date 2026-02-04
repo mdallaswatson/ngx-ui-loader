@@ -1,45 +1,41 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 
-import { NgxUiLoaderService, NgxUiLoaderModule } from 'ngx-ui-loader';
+import { RouterLink } from '@angular/router';
+import { MatButton } from '@angular/material/button';
+
+
 import { ControllerComponent } from '../controller/controller.component';
+import { NgxUiLoaderModule } from "projects/ngx-ui-loader/src/lib/core/ngx-ui-loader.module";
+import { Loader } from "projects/ngx-ui-loader/src/lib/utils/interfaces";
+
 
 @Component({
   selector: 'app-custom-template',
   templateUrl: './custom-template.component.html',
   styleUrls: ['./custom-template.component.scss'],
   imports: [
-    CommonModule,
     RouterLink,
-    MatButtonModule,
     NgxUiLoaderModule,
     ControllerComponent,
+    MatButton,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomTemplateComponent {
-  loader: {
-    hasProgressBar: boolean;
-    loaderId: string;
-    isMaster: boolean;
-    fgsSize: number;
-    bgsSize: number;
-    gap: number;
-    text: string;
+
+  loader = signal<Loader>({
+    loaderId: 'customLoaderId',
+    tasks: {},
+    isMaster: false,
+    isBound: false,
+  });
+
+  // Configuration for the loader display (immutable)
+  readonly loaderConfig = {
+    hasProgressBar: true,
+    fgsSize: 100,
+    bgsSize: 64,
+    gap: 80,
+    text: 'Custom Spinner',
   };
-  /**
-   * Constructor
-   */
-  constructor(public ngxUiLoader: NgxUiLoaderService) {
-    this.loader = {
-      hasProgressBar: true,
-      loaderId: 'customLoaderId',
-      isMaster: false,
-      fgsSize: 100,
-      bgsSize: 64,
-      gap: 80,
-      text: 'Custom Spinner',
-    };
-  }
 }

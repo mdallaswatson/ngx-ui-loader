@@ -1,13 +1,6 @@
 /* eslint-disable @angular-eslint/directive-selector */
 /* eslint-disable @angular-eslint/prefer-standalone */
-import {
-  Directive,
-  ElementRef,
-  Input,
-  OnDestroy,
-  Renderer2,
-  OnInit,
-} from '@angular/core';
+import { Directive, ElementRef, OnDestroy, Renderer2, OnInit, inject, input, signal } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
@@ -24,33 +17,28 @@ import {
   standalone: false,
 })
 export class NgxUiLoaderBlurredDirective implements OnInit, OnDestroy {
-  @Input() blur: number;
-  @Input() loaderId: string;
+  private elementRef = inject(ElementRef);
+  private renderer = inject(Renderer2);
+  private loader = inject(NgxUiLoaderService);
+  defaultConfig = this.loader.getDefaultConfig();
+
+  readonly blur = input<number>(this.defaultConfig.blur);
+  readonly loaderId = input<string>(this.defaultConfig.masterLoaderId);
 
   showForegroundWatcher: Subscription;
-  fastFadeOut: boolean;
+  fastFadeOut =  signal<boolean>(this.defaultConfig.fastFadeOut);
 
-  constructor(
-    private elementRef: ElementRef,
-    private renderer: Renderer2,
-    private loader: NgxUiLoaderService,
-  ) {
-    this.blur = this.loader.getDefaultConfig().blur;
-    this.loaderId = this.loader.getDefaultConfig().masterLoaderId;
-    this.fastFadeOut = this.loader.getDefaultConfig().fastFadeOut;
-  }
 
-  /**
-   * On Init event
-   */
+
+
   ngOnInit() {
     this.showForegroundWatcher = this.loader.showForeground$
       .pipe(
-        filter((showEvent: ShowEvent) => this.loaderId === showEvent.loaderId),
+        filter((showEvent: ShowEvent) => this.loaderId() === showEvent.loaderId),
       )
       .subscribe((data) => {
         if (data.isShow) {
-          const filterValue = `blur(${this.blur}px)`;
+          const filterValue = `blur(${this.blur()}px)`;
           this.renderer.setStyle(
             this.elementRef.nativeElement,
             '-webkit-filter',
@@ -77,7 +65,7 @@ export class NgxUiLoaderBlurredDirective implements OnInit, OnDestroy {
                 );
               }
             },
-            this.fastFadeOut
+            this.fastFadeOut()
               ? FAST_OVERLAY_DISAPPEAR_TIME
               : OVERLAY_DISAPPEAR_TIME,
           );
