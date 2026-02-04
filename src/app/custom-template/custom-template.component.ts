@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { RouterLink } from '@angular/router';
 import { MatButton } from '@angular/material/button';
@@ -19,6 +19,7 @@ import { Loader } from "projects/ngx-ui-loader/src/lib/utils/interfaces";
     ControllerComponent,
     MatButton,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomTemplateComponent {
 
@@ -29,8 +30,8 @@ export class CustomTemplateComponent {
     isBound: false,
   });
 
-  // Configuration for the loader display
-  loaderConfig = {
+  // Configuration for the loader display (immutable)
+  readonly loaderConfig = {
     hasProgressBar: true,
     fgsSize: 100,
     bgsSize: 64,
