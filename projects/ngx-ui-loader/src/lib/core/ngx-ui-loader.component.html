@@ -56,7 +56,7 @@
 
   <!-- Loading text {{{ -->
   <div
-    class="ngx-loading-text " + logoPosition
+    [class]="'ngx-loading-text ' + logoPosition()"
     [style.top]="textTop()"
     [style.color]="textColor()"
     >
