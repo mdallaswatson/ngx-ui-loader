@@ -1,6 +1,6 @@
 /* eslint-disable @angular-eslint/directive-selector */
 /* eslint-disable @angular-eslint/prefer-standalone */
-import { Directive, ElementRef, OnDestroy, Renderer2, OnInit, inject, input } from '@angular/core';
+import { Directive, ElementRef, OnDestroy, Renderer2, OnInit, inject, input, signal } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
@@ -26,7 +26,7 @@ export class NgxUiLoaderBlurredDirective implements OnInit, OnDestroy {
   readonly loaderId = input<string>(this.defaultConfig.masterLoaderId);
 
   showForegroundWatcher: Subscription;
-  fastFadeOut: boolean = this.defaultConfig.fastFadeOut;
+  fastFadeOut =  signal<boolean>(this.defaultConfig.fastFadeOut);
 
 
 
@@ -65,7 +65,7 @@ export class NgxUiLoaderBlurredDirective implements OnInit, OnDestroy {
                 );
               }
             },
-            this.fastFadeOut
+            this.fastFadeOut()
               ? FAST_OVERLAY_DISAPPEAR_TIME
               : OVERLAY_DISAPPEAR_TIME,
           );
