@@ -53,6 +53,13 @@ export class NgxUiLoaderHttpInterceptor implements HttpInterceptor {
       return next.handle(req);
     }
 
+    if (req.headers.has('bypass-loader')) {
+      let newReq = req.clone({
+        headers: req.headers.delete('bypass-loader'),
+      });
+      return next.handle(newReq);
+    }
+
     this.count++;
     if (this.config.showForeground) {
       this.loader.startLoader(
