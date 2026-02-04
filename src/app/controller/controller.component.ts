@@ -1,9 +1,9 @@
-import { Component, OnInit, OnDestroy, inject, input } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, input, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatListModule } from '@angular/material/list';
+import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatList, MatListItem, MatListModule } from '@angular/material/list';
 import { Loader } from "projects/ngx-ui-loader/src/lib/utils/interfaces";
 import { NgxUiLoaderService } from "projects/ngx-ui-loader/src/lib/core/ngx-ui-loader.service";
 
@@ -13,26 +13,28 @@ import { NgxUiLoaderService } from "projects/ngx-ui-loader/src/lib/core/ngx-ui-l
   selector: 'app-controller',
   templateUrl: './controller.component.html',
   styleUrls: ['./controller.component.scss'],
-  imports: [FormsModule, MatButtonModule, MatSlideToggleModule, MatListModule],
+  imports: [FormsModule, MatList, MatListItem, MatSlideToggle],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ControllerComponent implements OnInit, OnDestroy {
   private ngxUiLoaderService = inject(NgxUiLoaderService);
 
- loader = input.required<Loader>();
+  loader = input.required<Loader>();
 
   timers: ReturnType<typeof setTimeout>[];
-  tasks: { [key: string]: boolean };
+  tasks = signal<{ [key: string]: boolean }>({});
 
 
   ngOnInit() {
     this.timers = [];
-    this.tasks = {};
+    const initialTasks: { [key: string]: boolean } = {};
     if (this.loader().isMaster) {
       // Convert Tasks to boolean dictionary for UI state tracking
       Object.keys(this.loader().tasks).forEach((taskId) => {
-        this.tasks[taskId] = !!this.loader().tasks[taskId];
+        initialTasks[taskId] = !!this.loader().tasks[taskId];
       });
     }
+    this.tasks.set(initialTasks);
   }
 
   fgSlideChange(
@@ -42,12 +44,12 @@ export class ControllerComponent implements OnInit, OnDestroy {
   ) {
     if (checked) {
       this.ngxUiLoaderService.startLoader(this.loader().loaderId, taskId);
-      this.tasks[taskId] = true;
+      this.tasks.update(tasks => ({ ...tasks, [taskId]: true }));
       this.timers = [
         ...this.timers,
         setTimeout(() => {
           this.ngxUiLoaderService.stopLoader(this.loader().loaderId, taskId);
-          this.tasks[taskId] = false;
+          this.tasks.update(tasks => ({ ...tasks, [taskId]: false }));
         }, delay),
       ];
     }
@@ -59,13 +61,13 @@ export class ControllerComponent implements OnInit, OnDestroy {
         this.loader().loaderId,
         taskId,
       );
-      this.tasks[taskId] = true;
+      this.tasks.update(tasks => ({ ...tasks, [taskId]: true }));
     } else {
       this.ngxUiLoaderService.stopBackgroundLoader(
         this.loader().loaderId,
         taskId,
       );
-      this.tasks[taskId] = false;
+      this.tasks.update(tasks => ({ ...tasks, [taskId]: false }));
     }
   }
 
