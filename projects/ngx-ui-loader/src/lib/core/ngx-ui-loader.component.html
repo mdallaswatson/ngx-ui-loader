@@ -1,10 +1,10 @@
 <!-- Progress bar {{{ -->
-@if (hasProgressBar) {
+@if (hasProgressBar()) {
   <div
-    [class]="'ngx-progress-bar ngx-progress-bar-' + pbDirection"
-    [class.ngx-position-absolute]="loaderId !== defaultConfig.masterLoaderId"
-    [style.height.px]="pbThickness"
-    [style.color]="pbColor"
+    [class]="'ngx-progress-bar ngx-progress-bar-' + pbDirection()"
+    [class.ngx-position-absolute]="loaderId() !== defaultConfig.masterLoaderId"
+    [style.height.px]="pbThickness()"
+    [style.color]="pbColor()"
     [class.loading-foreground]="showForeground"
     [class.foreground-closing]="foregroundClosing"
     [class.fast-closing]="foregroundClosing && fastFadeOut"
@@ -15,20 +15,20 @@
 <!-- Foreground container {{{ -->
 <div
   class="ngx-overlay"
-  [class.ngx-position-absolute]="loaderId !== defaultConfig.masterLoaderId"
-  [style.background-color]="overlayColor"
-  [style.border-radius]="overlayBorderRadius"
+  [class.ngx-position-absolute]="loaderId() !== defaultConfig.masterLoaderId"
+  [style.background-color]="overlayColor()"
+  [style.border-radius]="overlayBorderRadius()"
   [class.loading-foreground]="showForeground"
   [class.foreground-closing]="foregroundClosing"
   [class.fast-closing]="foregroundClosing && fastFadeOut"
   >
   <!-- Logo {{{ -->
-  @if (logoUrl) {
+  @if (logoUrl()) {
     <img
-      [class]="'ngx-loading-logo ' + logoPosition"
+      [class]="'ngx-loading-logo ' + logoPosition()"
       [src]="trustedLogoUrl"
-      [style.width.px]="logoSize"
-      [style.height.px]="logoSize"
+      [style.width.px]="logoSize()"
+      [style.height.px]="logoSize()"
       [style.top]="logoTop"
       />
   }
@@ -36,10 +36,10 @@
 
   <!-- Foreground spinner {{{ -->
   <div
-    [class]="'ngx-foreground-spinner ' + fgsPosition"
-    [style.color]="fgsColor"
-    [style.width.px]="fgsSize"
-    [style.height.px]="fgsSize"
+    [class]="'ngx-foreground-spinner ' + fgsPosition()"
+    [style.color]="fgsColor()"
+    [style.width.px]="fgsSize()"
+    [style.height.px]="fgsSize()"
     [style.top]="spinnerTop"
     >
     @if (!fgsTemplate()) {
@@ -58,9 +58,9 @@
   <div
     class="ngx-loading-text " + logoPosition
     [style.top]="textTop"
-    [style.color]="textColor"
+    [style.color]="textColor()"
     >
-    <span>{{ text }}</span>
+    <span>{{ text() }}</span>
   </div>
   <!-- Loading text }}} -->
 </div>
@@ -68,16 +68,16 @@
 
 <!-- Background spinner {{{ -->
 <div
-  [class]="'ngx-background-spinner ' + bgsPosition"
-  [class.ngx-position-absolute]="loaderId !== defaultConfig.masterLoaderId"
+  [class]="'ngx-background-spinner ' + bgsPosition()"
+  [class.ngx-position-absolute]="loaderId() !== defaultConfig.masterLoaderId"
   [class.loading-background]="showBackground"
   [class.background-closing]="backgroundClosing"
   [class.fast-closing]="backgroundClosing && fastFadeOut"
 
-  [style.width.px]="bgsSize"
-  [style.height.px]="bgsSize"
-  [style.color]="bgsColor"
-  [style.opacity]="bgsOpacity"
+  [style.width.px]="bgsSize()"
+  [style.height.px]="bgsSize()"
+  [style.color]="bgsColor()"
+  [style.opacity]="bgsOpacity()"
   >
   @if (!bgsTemplate()) {
     <div [class]="bgSpinnerClass">
