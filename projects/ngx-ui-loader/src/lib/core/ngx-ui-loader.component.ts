@@ -15,13 +15,14 @@ import { DirectionType, PositionType, SpinnerType } from '../utils/types';
 import { POSITION } from '../utils/enums';
 import { SPINNER_CONFIG } from '../utils/constants';
 import { ShowEvent } from '../utils/interfaces';
+import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
-  selector: 'ngx-ui-loader',
-  templateUrl: './ngx-ui-loader.component.html',
-  styleUrls: ['./ngx-ui-loader.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'ngx-ui-loader',
+    templateUrl: './ngx-ui-loader.component.html',
+    styleUrls: ['./ngx-ui-loader.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NgTemplateOutlet],
 })
 export class NgxUiLoaderComponent implements OnDestroy, OnInit {
   private domSanitizer = inject(DomSanitizer);

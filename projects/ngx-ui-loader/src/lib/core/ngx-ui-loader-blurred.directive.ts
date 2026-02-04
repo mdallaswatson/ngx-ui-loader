@@ -12,10 +12,7 @@ import {
   FAST_OVERLAY_DISAPPEAR_TIME,
 } from '../utils/constants';
 
-@Directive({
-  selector: '[ngxUiLoaderBlurred]',
-  standalone: false,
-})
+@Directive({ selector: '[ngxUiLoaderBlurred]', })
 export class NgxUiLoaderBlurredDirective implements OnInit, OnDestroy {
   private elementRef = inject(ElementRef);
   private renderer = inject(Renderer2);
