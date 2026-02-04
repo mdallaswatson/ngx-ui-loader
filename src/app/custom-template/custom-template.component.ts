@@ -1,12 +1,13 @@
-import { Component, inject } from '@angular/core';
+import { Component, signal } from '@angular/core';
 
 import { RouterLink } from '@angular/router';
-import { MatButton, MatButtonModule } from '@angular/material/button';
+import { MatButton } from '@angular/material/button';
 
 
 import { ControllerComponent } from '../controller/controller.component';
 import { NgxUiLoaderModule } from "projects/ngx-ui-loader/src/lib/core/ngx-ui-loader.module";
-import { NgxUiLoaderService } from "projects/ngx-ui-loader/src/lib/core/ngx-ui-loader.service";
+import { Loader } from "projects/ngx-ui-loader/src/lib/utils/interfaces";
+
 
 @Component({
   selector: 'app-custom-template',
@@ -20,29 +21,20 @@ import { NgxUiLoaderService } from "projects/ngx-ui-loader/src/lib/core/ngx-ui-l
   ],
 })
 export class CustomTemplateComponent {
-  ngxUiLoader = inject(NgxUiLoaderService);
 
-  loader: {
-    hasProgressBar: boolean;
-    loaderId: string;
-    isMaster: boolean;
-    fgsSize: number;
-    bgsSize: number;
-    gap: number;
-    text: string;
+  loader = signal<Loader>({
+    loaderId: 'customLoaderId',
+    tasks: {},
+    isMaster: false,
+    isBound: false,
+  });
+
+  // Configuration for the loader display
+  loaderConfig = {
+    hasProgressBar: true,
+    fgsSize: 100,
+    bgsSize: 64,
+    gap: 80,
+    text: 'Custom Spinner',
   };
-
-
-  // eslint-disable-next-line @angular-eslint/prefer-inject
-  constructor() {
-    this.loader = {
-      hasProgressBar: true,
-      loaderId: 'customLoaderId',
-      isMaster: false,
-      fgsSize: 100,
-      bgsSize: 64,
-      gap: 80,
-      text: 'Custom Spinner',
-    };
-  }
 }
