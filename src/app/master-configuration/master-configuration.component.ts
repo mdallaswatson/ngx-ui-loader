@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { JsonPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -44,31 +44,37 @@ const LOGO_URL = 'assets/angular.png';
     MatCheckbox,
     MatButton
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MasterConfigurationComponent implements OnInit {
   private ngxUiLoaderService = inject(NgxUiLoaderService);
   demoService = inject(DemoService);
   private http = inject(HttpClient);
 
-  spinnerTypes: string[];
-  positions: string[];
-  directions: string[];
+  spinnerTypes = signal<string[]>([]);
+  positions = signal<string[]>([]);
+  directions = signal<string[]>([]);
 
-  disabled: boolean;
+  disabled = signal<boolean>(false);
 
-  loader: Loader;
+  loader = signal<Loader>({
+    loaderId: '',
+    tasks: {},
+    isMaster: true,
+    isBound: false,
+  });
 
   /**
    * On init
    */
   ngOnInit() {
-    this.spinnerTypes = Object.keys(SPINNER).map((key) => SPINNER[key]);
-    this.positions = Object.keys(POSITION).map((key) => POSITION[key]);
-    this.directions = Object.keys(PB_DIRECTION).map((key) => PB_DIRECTION[key]);
+    this.spinnerTypes.set(Object.keys(SPINNER).map((key) => SPINNER[key]));
+    this.positions.set(Object.keys(POSITION).map((key) => POSITION[key]));
+    this.directions.set(Object.keys(PB_DIRECTION).map((key) => PB_DIRECTION[key]));
 
-    this.disabled = false;
+    this.disabled.set(false);
 
-    this.loader = this.ngxUiLoaderService.getLoader();
+    this.loader.set(this.ngxUiLoaderService.getLoader());
   }
 
   /**
@@ -76,9 +82,9 @@ export class MasterConfigurationComponent implements OnInit {
    */
   addLogo(checked: boolean) {
     if (checked) {
-      this.demoService.config.logoUrl = LOGO_URL;
+      this.demoService.updateConfig({ logoUrl: LOGO_URL });
     } else {
-      this.demoService.config.logoUrl = '';
+      this.demoService.updateConfig({ logoUrl: '' });
     }
   }
 
@@ -86,18 +92,18 @@ export class MasterConfigurationComponent implements OnInit {
    * Toggle progress bar
    */
   toggleProgressBar(checked: boolean) {
-    this.demoService.config.hasProgressBar = checked;
+    this.demoService.updateConfig({ hasProgressBar: checked });
   }
 
   /**
    * Reset the form
    */
   reset() {
-    this.demoService.config = this.ngxUiLoaderService.getDefaultConfig();
+    this.demoService.config.set(this.ngxUiLoaderService.getDefaultConfig());
   }
 
   getDownloadStats() {
-    this.disabled = true;
+    this.disabled.set(true);
     this.http
       .get(
         `https://api.npmjs.org/downloads/range/last-month/ngx-ui-loader?t=${Date.now()}`,
@@ -105,7 +111,7 @@ export class MasterConfigurationComponent implements OnInit {
       .subscribe(
         (res: { downloads: Array<{ day: string; downloads: number }> }) => {
           console.log(res);
-          this.disabled = false;
+          this.disabled.set(false);
         },
       );
   }

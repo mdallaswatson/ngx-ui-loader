@@ -33,7 +33,6 @@ export class MultiloadersComponent {
     text?: string;
   }>;
   masterLoader: Loader;
-  timers: ReturnType<typeof setTimeout>[];
 
   constructor() {
     this.masterLoader = this.ngxUiLoaderService.getLoader();
