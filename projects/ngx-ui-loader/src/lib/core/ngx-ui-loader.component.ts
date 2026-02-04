@@ -1,6 +1,6 @@
 /* eslint-disable @angular-eslint/component-selector */
 /* eslint-disable @angular-eslint/prefer-standalone */
-import { Component, OnInit, OnChanges, SimpleChanges, SimpleChange, OnDestroy, ChangeDetectionStrategy, TemplateRef, inject, input, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, TemplateRef, inject, input, signal, effect } from '@angular/core';
 import {
   DomSanitizer,
   SafeResourceUrl,
@@ -23,7 +23,7 @@ import { ShowEvent } from '../utils/interfaces';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class NgxUiLoaderComponent implements OnChanges, OnDestroy, OnInit {
+export class NgxUiLoaderComponent implements OnDestroy, OnInit {
   private domSanitizer = inject(DomSanitizer);
   private ngxService = inject(NgxUiLoaderService);
 
@@ -78,20 +78,39 @@ export class NgxUiLoaderComponent implements OnChanges, OnDestroy, OnInit {
   foregroundClosingWatcher: Subscription;
   backgroundClosingWatcher: Subscription;
 
+  constructor() {
+    // Effect to reinitialize spinners when spinner types change
+    effect(() => {
+      this.bgsType();
+      this.fgsType();
+      this.initializeSpinners();
+    });
 
-  initialized: boolean = false;
+    // Effect to update positions when position-related inputs change
+    effect(() => {
+      this.logoPosition();
+      this.fgsPosition();
+      this.textPosition();
+      this.fgsSize();
+      this.logoSize();
+      this.gap();
+      this.determinePositions();
+    });
+
+    // Effect to update trusted logo URL when logoUrl changes
+    effect(() => {
+      const url = this.logoUrl();
+      this.trustedLogoUrl.set(
+        this.domSanitizer.bypassSecurityTrustResourceUrl(url)
+      );
+    });
+  }
 
 
 
 
   ngOnInit() {
-    this.initializeSpinners();
     this.ngxService.bindLoaderData(this.loaderId());
-    this.determinePositions();
-
-    this.trustedLogoUrl.set(this.domSanitizer.bypassSecurityTrustResourceUrl(
-      this.logoUrl(),
-    ));
 
     this.showForegroundWatcher = this.ngxService.showForeground$
       .pipe(
@@ -124,32 +143,6 @@ export class NgxUiLoaderComponent implements OnChanges, OnDestroy, OnInit {
       .subscribe((data) => {
         this.backgroundClosing.set(data.isShow);
       });
-    this.initialized = true;
-  }
-
-  /**
-   * On changes event
-   */
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.initialized) {
-      return;
-    }
-
-    const bgsTypeChange: SimpleChange = changes['bgsType'];
-    const fgsTypeChange: SimpleChange = changes['fgsType'];
-    const logoUrlChange: SimpleChange = changes['logoUrl'];
-
-    if (fgsTypeChange || bgsTypeChange) {
-      this.initializeSpinners();
-    }
-
-    this.determinePositions();
-
-    if (logoUrlChange) {
-      this.trustedLogoUrl.set(this.domSanitizer.bypassSecurityTrustResourceUrl(
-        this.logoUrl(),
-      ));
-    }
   }
 
   /**
