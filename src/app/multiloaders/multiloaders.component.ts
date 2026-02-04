@@ -3,13 +3,9 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 
-import {
-  NgxUiLoaderService,
-  NgxUiLoaderModule,
-  Loader,
-  SPINNER,
-} from 'ngx-ui-loader';
+
 import { ControllerComponent } from '../controller/controller.component';
+import { Loader, NgxUiLoaderModule, NgxUiLoaderService, SPINNER } from "projects/ngx-ui-loader/src/public-api";
 
 const LOGO_URL = 'assets/angular.png';
 

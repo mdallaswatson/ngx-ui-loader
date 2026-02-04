@@ -3,8 +3,10 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 
-import { NgxUiLoaderService, NgxUiLoaderModule } from 'ngx-ui-loader';
+
 import { ControllerComponent } from '../controller/controller.component';
+import { NgxUiLoaderModule } from "projects/ngx-ui-loader/src/lib/core/ngx-ui-loader.module";
+import { NgxUiLoaderService } from "projects/ngx-ui-loader/src/lib/core/ngx-ui-loader.service";
 
 @Component({
   selector: 'app-custom-template',
@@ -27,9 +29,9 @@ export class CustomTemplateComponent {
     gap: number;
     text: string;
   };
-  /**
-   * Constructor
-   */
+
+
+  // eslint-disable-next-line @angular-eslint/prefer-inject
   constructor(public ngxUiLoader: NgxUiLoaderService) {
     this.loader = {
       hasProgressBar: true,

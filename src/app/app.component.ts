@@ -1,11 +1,12 @@
 import { Component, ViewContainerRef } from '@angular/core';
-import { NgxUiLoaderModule } from 'ngx-ui-loader';
+
 import { RouterOutlet } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
 import { DemoService } from './demo.service';
+import { NgxUiLoaderModule } from "projects/ngx-ui-loader/src/lib/core/ngx-ui-loader.module";
 
 @Component({
   selector: 'app-root',

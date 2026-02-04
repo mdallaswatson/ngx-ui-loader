@@ -1,6 +1,7 @@
 import { TestBed, inject } from '@angular/core/testing';
-import { NgxUiLoaderService } from 'ngx-ui-loader';
+
 import { DemoService } from './demo.service';
+import { NgxUiLoaderService } from "projects/ngx-ui-loader/src/public-api";
 
 describe('NgxUiLoaderDemoService', () => {
   beforeEach(() => {

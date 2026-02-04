@@ -15,15 +15,12 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { ColorPickerDirective } from 'ngx-color-picker';
 
-import {
-  NgxUiLoaderService,
-  Loader,
-  SPINNER,
-  POSITION,
-  PB_DIRECTION,
-} from 'ngx-ui-loader';
+
 import { DemoService } from '../demo.service';
 import { ControllerComponent } from '../controller/controller.component';
+import { Loader } from "projects/ngx-ui-loader/src/lib/utils/interfaces";
+import { NgxUiLoaderService } from "projects/ngx-ui-loader/src/lib/core/ngx-ui-loader.service";
+import { PB_DIRECTION, POSITION, SPINNER } from "projects/ngx-ui-loader/src/public-api";
 
 const LOGO_URL = 'assets/angular.png';
 

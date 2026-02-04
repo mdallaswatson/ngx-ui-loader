@@ -4,8 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatListModule } from '@angular/material/list';
+import { Loader } from "projects/ngx-ui-loader/src/lib/utils/interfaces";
+import { NgxUiLoaderService } from "projects/ngx-ui-loader/src/lib/core/ngx-ui-loader.service";
 
-import { NgxUiLoaderService, Loader } from 'ngx-ui-loader';
+
 
 @Component({
   selector: 'app-controller',
