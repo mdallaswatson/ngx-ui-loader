@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -20,6 +20,8 @@ import { NgxUiLoaderService } from "projects/ngx-ui-loader/src/lib/core/ngx-ui-l
   ],
 })
 export class CustomTemplateComponent {
+  ngxUiLoader = inject(NgxUiLoaderService);
+
   loader: {
     hasProgressBar: boolean;
     loaderId: string;
@@ -32,7 +34,7 @@ export class CustomTemplateComponent {
 
 
   // eslint-disable-next-line @angular-eslint/prefer-inject
-  constructor(public ngxUiLoader: NgxUiLoaderService) {
+  constructor() {
     this.loader = {
       hasProgressBar: true,
       loaderId: 'customLoaderId',

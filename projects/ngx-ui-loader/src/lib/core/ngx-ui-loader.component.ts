@@ -1,17 +1,6 @@
 /* eslint-disable @angular-eslint/component-selector */
 /* eslint-disable @angular-eslint/prefer-standalone */
-import {
-  Component,
-  Input,
-  OnInit,
-  OnChanges,
-  SimpleChanges,
-  SimpleChange,
-  OnDestroy,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  TemplateRef,
-} from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges, SimpleChange, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, TemplateRef, inject } from '@angular/core';
 import {
   DomSanitizer,
   SafeResourceUrl,
@@ -35,6 +24,10 @@ import { ShowEvent } from '../utils/interfaces';
   standalone: false,
 })
 export class NgxUiLoaderComponent implements OnChanges, OnDestroy, OnInit {
+  private domSanitizer = inject(DomSanitizer);
+  private changeDetectorRef = inject(ChangeDetectorRef);
+  private ngxService = inject(NgxUiLoaderService);
+
   @Input() bgsColor: string;
   @Input() bgsOpacity: number;
   @Input() bgsPosition: PositionType;
@@ -89,11 +82,7 @@ export class NgxUiLoaderComponent implements OnChanges, OnDestroy, OnInit {
   /**
    * Constructor
    */
-  constructor(
-    private domSanitizer: DomSanitizer,
-    private changeDetectorRef: ChangeDetectorRef,
-    private ngxService: NgxUiLoaderService,
-  ) {
+  constructor() {
     this.defaultConfig = this.ngxService.getDefaultConfig();
 
     this.bgsColor = this.defaultConfig.bgsColor;

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,6 +21,8 @@ const LOGO_URL = 'assets/angular.png';
   ],
 })
 export class MultiloadersComponent {
+  private ngxUiLoaderService = inject(NgxUiLoaderService);
+
   loaders: Array<{
     hasProgressBar: boolean;
     loaderId: string;
@@ -33,7 +35,7 @@ export class MultiloadersComponent {
   masterLoader: Loader;
   timers: ReturnType<typeof setTimeout>[];
 
-  constructor(private ngxUiLoaderService: NgxUiLoaderService) {
+  constructor() {
     this.masterLoader = this.ngxUiLoaderService.getLoader();
     this.loaders = [
       {

@@ -1,4 +1,4 @@
-import { Component, ViewContainerRef } from '@angular/core';
+import { Component, ViewContainerRef, inject } from '@angular/core';
 
 import { RouterOutlet } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -21,13 +21,9 @@ import { NgxUiLoaderModule } from "projects/ngx-ui-loader/src/lib/core/ngx-ui-lo
   ],
 })
 export class AppComponent {
-  /**
-   * Constructor
-   */
-  constructor(
-    public demoService: DemoService,
-    public vcRef: ViewContainerRef,
-  ) {}
+  demoService = inject(DemoService);
+  vcRef = inject(ViewContainerRef);
+
 
   openDocumentation() {
     window.open('https://tdev.app/ngx-ui-loader', '_blank');

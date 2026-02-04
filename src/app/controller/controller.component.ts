@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, inject } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,12 +16,12 @@ import { NgxUiLoaderService } from "projects/ngx-ui-loader/src/lib/core/ngx-ui-l
   imports: [FormsModule, MatButtonModule, MatSlideToggleModule, MatListModule],
 })
 export class ControllerComponent implements OnInit, OnDestroy {
+  private ngxUiLoaderService = inject(NgxUiLoaderService);
+
   @Input() loader: Loader;
 
   timers: ReturnType<typeof setTimeout>[];
   tasks: { [key: string]: boolean };
-
-  constructor(private ngxUiLoaderService: NgxUiLoaderService) {}
 
   /**
    * On init

@@ -1,13 +1,6 @@
 /* eslint-disable @angular-eslint/directive-selector */
 /* eslint-disable @angular-eslint/prefer-standalone */
-import {
-  Directive,
-  ElementRef,
-  Input,
-  OnDestroy,
-  Renderer2,
-  OnInit,
-} from '@angular/core';
+import { Directive, ElementRef, Input, OnDestroy, Renderer2, OnInit, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
@@ -24,17 +17,17 @@ import {
   standalone: false,
 })
 export class NgxUiLoaderBlurredDirective implements OnInit, OnDestroy {
+  private elementRef = inject(ElementRef);
+  private renderer = inject(Renderer2);
+  private loader = inject(NgxUiLoaderService);
+
   @Input() blur: number;
   @Input() loaderId: string;
 
   showForegroundWatcher: Subscription;
   fastFadeOut: boolean;
 
-  constructor(
-    private elementRef: ElementRef,
-    private renderer: Renderer2,
-    private loader: NgxUiLoaderService,
-  ) {
+  constructor() {
     this.blur = this.loader.getDefaultConfig().blur;
     this.loaderId = this.loader.getDefaultConfig().masterLoaderId;
     this.fastFadeOut = this.loader.getDefaultConfig().fastFadeOut;

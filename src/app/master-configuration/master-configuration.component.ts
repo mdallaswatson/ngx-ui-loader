@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -46,6 +46,10 @@ const LOGO_URL = 'assets/angular.png';
   ],
 })
 export class MasterConfigurationComponent implements OnInit {
+  private ngxUiLoaderService = inject(NgxUiLoaderService);
+  demoService = inject(DemoService);
+  private http = inject(HttpClient);
+
   spinnerTypes: string[];
   positions: string[];
   directions: string[];
@@ -53,15 +57,6 @@ export class MasterConfigurationComponent implements OnInit {
   disabled: boolean;
 
   loader: Loader;
-
-  /**
-   * Constructor
-   */
-  constructor(
-    private ngxUiLoaderService: NgxUiLoaderService,
-    public demoService: DemoService,
-    private http: HttpClient,
-  ) {}
 
   /**
    * On init

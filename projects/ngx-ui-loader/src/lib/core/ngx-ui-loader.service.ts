@@ -1,4 +1,4 @@
-import { Inject, Injectable, Optional } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import {
@@ -30,6 +30,8 @@ import {
   providedIn: 'root',
 })
 export class NgxUiLoaderService {
+  private config = inject<NgxUiLoaderConfig>(NGX_UI_LOADER_CONFIG_TOKEN, { optional: true })!;
+
   /**
    * For internal use only.
    *
@@ -68,11 +70,7 @@ export class NgxUiLoaderService {
   /**
    * Constructor
    */
-  constructor(
-    @Optional()
-    @Inject(NGX_UI_LOADER_CONFIG_TOKEN)
-    private config: NgxUiLoaderConfig
-  ) {
+  constructor() {
     this.defaultConfig = { ...DEFAULT_CONFIG };
     if (this.config) {
       if (this.config.minTime && this.config.minTime < MIN_TIME) {

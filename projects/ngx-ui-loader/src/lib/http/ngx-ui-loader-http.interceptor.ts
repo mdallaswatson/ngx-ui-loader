@@ -1,4 +1,4 @@
-import { Injectable, Inject, Optional } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   HttpInterceptor,
   HttpEvent,
@@ -17,6 +17,8 @@ import { Exclude } from '../utils/interfaces';
 
 @Injectable()
 export class NgxUiLoaderHttpInterceptor implements HttpInterceptor {
+  private loader = inject(NgxUiLoaderService);
+
   private count: number;
   private config: NgxUiLoaderHttpConfig;
   private exclude: Exclude;
@@ -24,12 +26,9 @@ export class NgxUiLoaderHttpInterceptor implements HttpInterceptor {
   /**
    * Constructor
    */
-  constructor(
-    @Optional()
-    @Inject(NGX_UI_LOADER_HTTP_CONFIG_TOKEN)
-    customConfig: NgxUiLoaderHttpConfig,
-    private loader: NgxUiLoaderService,
-  ) {
+  constructor() {
+    const customConfig = inject<NgxUiLoaderHttpConfig>(NGX_UI_LOADER_HTTP_CONFIG_TOKEN, { optional: true })!;
+
     this.count = 0;
     this.config = {
       loaderId: this.loader.getDefaultConfig().masterLoaderId,
