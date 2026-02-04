@@ -5,9 +5,9 @@
     <div
       class="fxFlex-xs-90 fxFlex-sm-70 fxFlex-40 container mat-elevation-z4 master"
       >
-      <app-controller [loader]="masterLoader" />
+      <app-controller [loader]="masterLoader()" />
     </div>
-    @for (l of loaders; track l) {
+    @for (l of loaders(); track l) {
       <div
         class="fxFlex-xs-90 fxFlex-sm-70 fxFlex-40 container mat-elevation-z4"
         >

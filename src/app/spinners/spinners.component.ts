@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { RouterLink } from '@angular/router';
 import { SPINNER_CONFIG } from 'projects/ngx-ui-loader/src/lib/utils/constants';
@@ -13,15 +13,16 @@ import { MatButton } from "@angular/material/button";
     './spinners.component.scss',
   ],
   imports: [RouterLink, MatButton],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SpinnersComponent {
-  spinners: Array<{
+  spinners = signal<Array<{
     name: string;
     divs: number[];
     class: string;
-  }> = Object.keys(SPINNER_CONFIG).map((key) => ({
+  }>>(Object.keys(SPINNER_CONFIG).map((key) => ({
     name: key,
     divs: Array(SPINNER_CONFIG[key].divs).fill(1),
     class: SPINNER_CONFIG[key].class,
-  }));
+  })));
 }

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { RouterLink } from '@angular/router';
 import { MatButton } from '@angular/material/button';
@@ -19,11 +19,14 @@ const LOGO_URL = 'assets/angular.png';
     ControllerComponent,
     MatButton,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MultiloadersComponent {
   private ngxUiLoaderService = inject(NgxUiLoaderService);
 
-  loaders: Array<{
+  masterLoader = signal<Loader>(this.ngxUiLoaderService.getLoader());
+
+  loaders = signal<Array<{
     hasProgressBar: boolean;
     loaderId: string;
     logoUrl?: string;
@@ -31,33 +34,27 @@ export class MultiloadersComponent {
     isMaster: boolean;
     spinnerType: SPINNER;
     text?: string;
-  }>;
-  masterLoader: Loader;
-
-  constructor() {
-    this.masterLoader = this.ngxUiLoaderService.getLoader();
-    this.loaders = [
-      {
-        hasProgressBar: true,
-        loaderId: 'loader-01',
-        logoUrl: LOGO_URL,
-        logoSize: 80,
-        isMaster: false,
-        spinnerType: SPINNER.ballScaleMultiple,
-      },
-      {
-        hasProgressBar: false,
-        loaderId: 'loader-02',
-        isMaster: false,
-        spinnerType: SPINNER.chasingDots,
-        text: 'NO progress bar',
-      },
-      {
-        hasProgressBar: true,
-        loaderId: 'loader-03',
-        isMaster: false,
-        spinnerType: SPINNER.wanderingCubes,
-      },
-    ];
-  }
+  }>>([
+    {
+      hasProgressBar: true,
+      loaderId: 'loader-01',
+      logoUrl: LOGO_URL,
+      logoSize: 80,
+      isMaster: false,
+      spinnerType: SPINNER.ballScaleMultiple,
+    },
+    {
+      hasProgressBar: false,
+      loaderId: 'loader-02',
+      isMaster: false,
+      spinnerType: SPINNER.chasingDots,
+      text: 'NO progress bar',
+    },
+    {
+      hasProgressBar: true,
+      loaderId: 'loader-03',
+      isMaster: false,
+      spinnerType: SPINNER.wanderingCubes,
+    },
+  ]);
 }
