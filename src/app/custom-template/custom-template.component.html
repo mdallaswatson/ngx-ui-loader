@@ -6,17 +6,16 @@
       class="fxFlex-xs-90 fxFlex-sm-70 fxFlex-40 container mat-elevation-z4"
     >
       <div class="fxFlex-100" [loaderId]="loader.loaderId" ngxUiLoaderBlurred>
-        <app-controller [loader]="loader"></app-controller>
+        <app-controller [loader]="loader" />
       </div>
-      <ngx-ui-loader
-        [loaderId]="loader.loaderId"
+      <ngx-ui-loader [loaderId]="loader.loaderId"
         [fgsTemplate]="foregroundSpinner"
         [bgsTemplate]="backgroundSpinner"
         [fgsSize]="loader.fgsSize"
         [bgsSize]="loader.bgsSize"
         [text]="loader.text"
         [gap]="loader.gap"
-      ></ngx-ui-loader>
+       />
     </div>
   </div>
   <div

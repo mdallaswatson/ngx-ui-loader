@@ -5,24 +5,23 @@
     <div
       class="fxFlex-xs-90 fxFlex-sm-70 fxFlex-40 container mat-elevation-z4 master"
       >
-      <app-controller [loader]="masterLoader"></app-controller>
+      <app-controller [loader]="masterLoader" />
     </div>
     @for (l of loaders; track l) {
       <div
         class="fxFlex-xs-90 fxFlex-sm-70 fxFlex-40 container mat-elevation-z4"
         >
         <div class="fxFlex-100" [loaderId]="l.loaderId" ngxUiLoaderBlurred>
-          <app-controller [loader]="l"></app-controller>
+          <app-controller [loader]="l" />
         </div>
-        <ngx-ui-loader
-          [hasProgressBar]="l.hasProgressBar"
+        <ngx-ui-loader [hasProgressBar]="l.hasProgressBar"
           [loaderId]="l.loaderId"
           [logoUrl]="l.logoUrl"
           [logoSize]="l.logoSize"
           [text]="l.text"
           [fgsType]="l.spinnerType"
           [bgsType]="l.spinnerType"
-        ></ngx-ui-loader>
+         />
       </div>
     }
   </div>

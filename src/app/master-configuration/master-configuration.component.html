@@ -6,7 +6,7 @@
       class="fxFlex-100 fxFlex-gt-md-36 fxLayout-column fxLayout-sm-row fxLayout-md-row p-12"
       >
       <div class="fxFlex-sm-50 fxFlex-md-50 mat-elevation-z4">
-        <app-controller [loader]="loader"></app-controller>
+        <app-controller [loader]="loader" />
       </div>
       <div class="fxLayout-column fxFlex-sm-50 fxFlex-md-50 config-info">
         <span class="place-holder">ngx-ui-loader-configuration = </span>
@@ -33,11 +33,10 @@
             (click)="$event.stopPropagation()"
             type="button"
             >
-            <mat-icon
-              [style.color]="demoService.config.fgsColor"
+            <mat-icon [style.color]="demoService.config.fgsColor"
               fontIcon="mdi-palette"
               fontSet="mdi"
-            ></mat-icon>
+             />
           </button>
         </mat-form-field>
 
@@ -110,11 +109,10 @@
                 (click)="$event.stopPropagation()"
                 type="button"
                 >
-                <mat-icon
-                  [style.color]="demoService.config.overlayColor"
+                <mat-icon [style.color]="demoService.config.overlayColor"
                   fontIcon="mdi-palette"
                   fontSet="mdi"
-                ></mat-icon>
+                 />
               </button>
             </mat-form-field>
 
@@ -143,11 +141,10 @@
                       (click)="$event.stopPropagation()"
                       type="button"
                       >
-                      <mat-icon
-                        [style.color]="demoService.config.pbColor"
+                      <mat-icon [style.color]="demoService.config.pbColor"
                         fontIcon="mdi-palette"
                         fontSet="mdi"
-                      ></mat-icon>
+                       />
                     </button>
                   </mat-form-field>
                 }
@@ -212,11 +209,10 @@
                           (click)="$event.stopPropagation()"
                           type="button"
                           >
-                          <mat-icon
-                            [style.color]="demoService.config.bgsColor"
+                          <mat-icon [style.color]="demoService.config.bgsColor"
                             fontIcon="mdi-palette"
                             fontSet="mdi"
-                          ></mat-icon>
+                           />
                         </button>
                       </mat-form-field>
 
@@ -359,11 +355,10 @@
                                             (click)="$event.stopPropagation()"
                                             >
                                             <button mat-icon-button type="button">
-                                              <mat-icon
-                                                [style.color]="demoService.config.textColor"
+                                              <mat-icon [style.color]="demoService.config.textColor"
                                                 fontIcon="mdi-palette"
                                                 fontSet="mdi"
-                                              ></mat-icon>
+                                               />
                                             </button>
                                           </div>
                                         </mat-form-field>
