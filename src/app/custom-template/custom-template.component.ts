@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 
 import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
+import { MatButton, MatButtonModule } from '@angular/material/button';
 
 
 import { ControllerComponent } from '../controller/controller.component';
@@ -14,9 +14,9 @@ import { NgxUiLoaderService } from "projects/ngx-ui-loader/src/lib/core/ngx-ui-l
   styleUrls: ['./custom-template.component.scss'],
   imports: [
     RouterLink,
-    MatButtonModule,
     NgxUiLoaderModule,
     ControllerComponent,
+    MatButton,
   ],
 })
 export class CustomTemplateComponent {

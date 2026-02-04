@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 
 import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
+import { MatButton } from '@angular/material/button';
 
 
 import { ControllerComponent } from '../controller/controller.component';
@@ -15,9 +15,9 @@ const LOGO_URL = 'assets/angular.png';
   styleUrls: ['./multiloaders.component.scss'],
   imports: [
     RouterLink,
-    MatButtonModule,
     NgxUiLoaderModule,
     ControllerComponent,
+    MatButton,
   ],
 })
 export class MultiloadersComponent {

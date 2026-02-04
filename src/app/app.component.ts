@@ -1,12 +1,13 @@
-import { Component, ViewContainerRef, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { RouterOutlet } from '@angular/router';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
 
 import { DemoService } from './demo.service';
 import { NgxUiLoaderModule } from "projects/ngx-ui-loader/src/lib/core/ngx-ui-loader.module";
+
 
 @Component({
   selector: 'app-root',
@@ -15,14 +16,13 @@ import { NgxUiLoaderModule } from "projects/ngx-ui-loader/src/lib/core/ngx-ui-lo
   imports: [
     NgxUiLoaderModule,
     RouterOutlet,
-    MatToolbarModule,
-    MatIconModule,
-    MatButtonModule,
+    MatToolbar,
+    MatIcon,
+    MatButton,
   ],
 })
 export class AppComponent {
   demoService = inject(DemoService);
-  vcRef = inject(ViewContainerRef);
 
 
   openDocumentation() {

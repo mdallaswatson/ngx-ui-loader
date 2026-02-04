@@ -1,18 +1,16 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { JsonPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
-import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatListModule } from '@angular/material/list';
-import { MatSelectModule } from '@angular/material/select';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatSliderModule } from '@angular/material/slider';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
+import { MatInput } from '@angular/material/input';
+import { MatOption, MatSelect } from '@angular/material/select';
+import { MatSlider, MatSliderThumb } from '@angular/material/slider';
 import { ColorPickerDirective } from 'ngx-color-picker';
 
 
@@ -31,19 +29,21 @@ const LOGO_URL = 'assets/angular.png';
   imports: [
     FormsModule,
     RouterLink,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatListModule,
-    MatSelectModule,
-    MatSlideToggleModule,
-    MatSliderModule,
     ColorPickerDirective,
     ControllerComponent,
-    JsonPipe
-],
+    JsonPipe,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatIconButton,
+    MatIcon,
+    MatSelect,
+    MatOption,
+    MatSlider,
+    MatSliderThumb,
+    MatCheckbox,
+    MatButton
+  ],
 })
 export class MasterConfigurationComponent implements OnInit {
   private ngxUiLoaderService = inject(NgxUiLoaderService);

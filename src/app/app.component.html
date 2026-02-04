@@ -1,35 +1,34 @@
-<ngx-ui-loader [fgsColor]="demoService.config.fgsColor"
-  [fgsPosition]="demoService.config.fgsPosition"
-  [fgsSize]="demoService.config.fgsSize"
-  [fgsType]="demoService.config.fgsType"
-  [bgsColor]="demoService.config.bgsColor"
-  [bgsOpacity]="demoService.config.bgsOpacity"
-  [bgsPosition]="demoService.config.bgsPosition"
-  [bgsSize]="demoService.config.bgsSize"
-  [bgsType]="demoService.config.bgsType"
-  [gap]="demoService.config.gap"
-  [logoPosition]="demoService.config.logoPosition"
-  [logoSize]="demoService.config.logoSize"
-  [logoUrl]="demoService.config.logoUrl"
-  [overlayColor]="demoService.config.overlayColor"
-  [pbColor]="demoService.config.pbColor"
-  [pbDirection]="demoService.config.pbDirection"
-  [pbThickness]="demoService.config.pbThickness"
-  [hasProgressBar]="demoService.config.hasProgressBar"
-  [text]="demoService.config.text"
-  [textColor]="demoService.config.textColor"
-  [textPosition]="demoService.config.textPosition"
- />
+<ngx-ui-loader  [fgsColor]="demoService.config.fgsColor"
+                [fgsPosition]="demoService.config.fgsPosition"
+                [fgsSize]="demoService.config.fgsSize"
+                [fgsType]="demoService.config.fgsType"
+                [bgsColor]="demoService.config.bgsColor"
+                [bgsOpacity]="demoService.config.bgsOpacity"
+                [bgsPosition]="demoService.config.bgsPosition"
+                [bgsSize]="demoService.config.bgsSize"
+                [bgsType]="demoService.config.bgsType"
+                [gap]="demoService.config.gap"
+                [logoPosition]="demoService.config.logoPosition"
+                [logoSize]="demoService.config.logoSize"
+                [logoUrl]="demoService.config.logoUrl"
+                [overlayColor]="demoService.config.overlayColor"
+                [pbColor]="demoService.config.pbColor"
+                [pbDirection]="demoService.config.pbDirection"
+                [pbThickness]="demoService.config.pbThickness"
+                [hasProgressBar]="demoService.config.hasProgressBar"
+                [text]="demoService.config.text"
+                [textColor]="demoService.config.textColor"
+                [textPosition]="demoService.config.textPosition"/>
 
 <div ngxUiLoaderBlurred [blur]="demoService.config.blur">
   <mat-toolbar color="primary">
     <button mat-button (click)="openDocumentation()">
-      <mat-icon inline class="mdi mdi-book-open-page-variant" />
+      <mat-icon [inline]="true" class="mdi mdi-book-open-page-variant" />
       DOCUMENTATION
     </button>
     <span class="fill-space"></span>
     <button mat-button (click)="openGithub()">
-      <mat-icon inline class="mdi mdi-github" />
+      <mat-icon [inline]="true" class="mdi mdi-github" />
       Github
     </button>
   </mat-toolbar>

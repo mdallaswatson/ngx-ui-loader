@@ -8,14 +8,13 @@
       <div class="fxFlex-100" [loaderId]="loader.loaderId" ngxUiLoaderBlurred>
         <app-controller [loader]="loader" />
       </div>
-      <ngx-ui-loader [loaderId]="loader.loaderId"
-        [fgsTemplate]="foregroundSpinner"
-        [bgsTemplate]="backgroundSpinner"
-        [fgsSize]="loader.fgsSize"
-        [bgsSize]="loader.bgsSize"
-        [text]="loader.text"
-        [gap]="loader.gap"
-       />
+      <ngx-ui-loader  [loaderId]="loader.loaderId"
+                      [fgsTemplate]="foregroundSpinner"
+                      [bgsTemplate]="backgroundSpinner"
+                      [fgsSize]="loader.fgsSize"
+                      [bgsSize]="loader.bgsSize"
+                      [text]="loader.text"
+                      [gap]="loader.gap"/>
     </div>
   </div>
   <div
