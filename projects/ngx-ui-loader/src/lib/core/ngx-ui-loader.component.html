@@ -42,14 +42,14 @@
     [style.height.px]="fgsSize"
     [style.top]="spinnerTop"
     >
-    @if (!fgsTemplate) {
+    @if (!fgsTemplate()) {
       <div [class]="fgSpinnerClass">
         @for (div of fgDivs; track div) {
           <div></div>
         }
       </div>
     } @else {
-      <ng-container *ngTemplateOutlet="fgsTemplate" />
+      <ng-container *ngTemplateOutlet="fgsTemplate()" />
     }
   </div>
   <!-- Foreground spinner }}} -->
@@ -79,14 +79,14 @@
   [style.color]="bgsColor"
   [style.opacity]="bgsOpacity"
   >
-  @if (!bgsTemplate) {
+  @if (!bgsTemplate()) {
     <div [class]="bgSpinnerClass">
       @for (div of bgDivs; track div) {
         <div></div>
       }
     </div>
   } @else {
-    <ng-container *ngTemplateOutlet="bgsTemplate" />
+    <ng-container *ngTemplateOutlet="bgsTemplate()" />
   }
 </div>
 <!-- Background spinner }}} -->

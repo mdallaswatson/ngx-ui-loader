@@ -1,6 +1,6 @@
 /* eslint-disable @angular-eslint/component-selector */
 /* eslint-disable @angular-eslint/prefer-standalone */
-import { Component, Input, OnInit, OnChanges, SimpleChanges, SimpleChange, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, TemplateRef, inject } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges, SimpleChange, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, TemplateRef, inject, input } from '@angular/core';
 import {
   DomSanitizer,
   SafeResourceUrl,
@@ -28,35 +28,38 @@ export class NgxUiLoaderComponent implements OnChanges, OnDestroy, OnInit {
   private changeDetectorRef = inject(ChangeDetectorRef);
   private ngxService = inject(NgxUiLoaderService);
 
-  @Input() bgsColor: string;
-  @Input() bgsOpacity: number;
-  @Input() bgsPosition: PositionType;
-  @Input() bgsSize: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  @Input() bgsTemplate: TemplateRef<any>;
-  @Input() bgsType: SpinnerType;
-  @Input() fgsColor: string;
-  @Input() fgsPosition: PositionType;
-  @Input() fgsSize: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  @Input() fgsTemplate: TemplateRef<any>;
-  @Input() fgsType: SpinnerType;
-  @Input() gap: number;
-  @Input() loaderId: string;
-  @Input() logoPosition: PositionType;
-  @Input() logoSize: number;
-  @Input() logoUrl: string;
-  @Input() overlayBorderRadius: string;
-  @Input() overlayColor: string;
-  @Input() pbColor: string;
-  @Input() pbDirection: DirectionType;
-  @Input() pbThickness: number;
-  @Input() hasProgressBar: boolean;
-  @Input() text: string;
-  @Input() textColor: string;
-  @Input() textPosition: PositionType;
+  defaultConfig: NgxUiLoaderConfig = this.ngxService.getDefaultConfig();
 
-  fastFadeOut: boolean;
+
+  @Input() bgsColor: string = this.defaultConfig.bgsColor;
+  @Input() bgsOpacity: number = this.defaultConfig.bgsOpacity;
+  @Input() bgsPosition: PositionType = this.defaultConfig.bgsPosition;
+  @Input() bgsSize: number = this.defaultConfig.bgsSize;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly bgsTemplate = input<TemplateRef<any>>(undefined);
+  @Input() bgsType: SpinnerType = this.defaultConfig.bgsType;
+  @Input() fgsColor: string = this.defaultConfig.fgsColor;
+  @Input() fgsPosition: PositionType = this.defaultConfig.fgsPosition;
+  @Input() fgsSize: number = this.defaultConfig.fgsSize;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly fgsTemplate = input<TemplateRef<any>>(undefined);
+  @Input() fgsType: SpinnerType = this.defaultConfig.fgsType;
+  @Input() gap: number = this.defaultConfig.gap;
+  @Input() loaderId: string = this.defaultConfig.masterLoaderId;
+  @Input() logoPosition: PositionType = this.defaultConfig.logoPosition;
+  @Input() logoSize: number = this.defaultConfig.logoSize;
+  @Input() logoUrl: string = this.defaultConfig.logoUrl;
+  @Input() overlayBorderRadius: string = this.defaultConfig.overlayBorderRadius;
+  @Input() overlayColor: string = this.defaultConfig.overlayColor;
+  @Input() pbColor: string = this.defaultConfig.pbColor;
+  @Input() pbDirection: DirectionType = this.defaultConfig.pbDirection;
+  @Input() pbThickness: number = this.defaultConfig.pbThickness;
+  @Input() hasProgressBar: boolean = this.defaultConfig.hasProgressBar;
+  @Input() text: string = this.defaultConfig.text;
+  @Input() textColor: string = this.defaultConfig.textColor;
+  @Input() textPosition: PositionType = this.defaultConfig.textPosition;
+
+  fastFadeOut: boolean = this.defaultConfig.fastFadeOut;
   fgDivs: number[];
   fgSpinnerClass: string;
   bgDivs: number[];
@@ -76,44 +79,12 @@ export class NgxUiLoaderComponent implements OnChanges, OnDestroy, OnInit {
   foregroundClosingWatcher: Subscription;
   backgroundClosingWatcher: Subscription;
 
-  defaultConfig: NgxUiLoaderConfig;
+
   initialized: boolean = false;
 
-  /**
-   * Constructor
-   */
-  constructor() {
-    this.defaultConfig = this.ngxService.getDefaultConfig();
 
-    this.bgsColor = this.defaultConfig.bgsColor;
-    this.bgsOpacity = this.defaultConfig.bgsOpacity;
-    this.bgsPosition = this.defaultConfig.bgsPosition;
-    this.bgsSize = this.defaultConfig.bgsSize;
-    this.bgsType = this.defaultConfig.bgsType;
-    this.fastFadeOut = this.defaultConfig.fastFadeOut;
-    this.fgsColor = this.defaultConfig.fgsColor;
-    this.fgsPosition = this.defaultConfig.fgsPosition;
-    this.fgsSize = this.defaultConfig.fgsSize;
-    this.fgsType = this.defaultConfig.fgsType;
-    this.gap = this.defaultConfig.gap;
-    this.loaderId = this.defaultConfig.masterLoaderId;
-    this.logoPosition = this.defaultConfig.logoPosition;
-    this.logoSize = this.defaultConfig.logoSize;
-    this.logoUrl = this.defaultConfig.logoUrl;
-    this.overlayBorderRadius = this.defaultConfig.overlayBorderRadius;
-    this.overlayColor = this.defaultConfig.overlayColor;
-    this.pbColor = this.defaultConfig.pbColor;
-    this.pbDirection = this.defaultConfig.pbDirection;
-    this.pbThickness = this.defaultConfig.pbThickness;
-    this.hasProgressBar = this.defaultConfig.hasProgressBar;
-    this.text = this.defaultConfig.text;
-    this.textColor = this.defaultConfig.textColor;
-    this.textPosition = this.defaultConfig.textPosition;
-  }
 
-  /**
-   * On init event
-   */
+
   ngOnInit() {
     this.initializeSpinners();
     this.ngxService.bindLoaderData(this.loaderId);
